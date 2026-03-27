@@ -1,0 +1,126 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size: 13px;
+  color: #333;
+  background: #f4f5f7;
+}
+
+header {
+  background: #2c3e50;
+  color: #fff;
+  padding: 14px 24px;
+}
+header h1 { font-size: 18px; font-weight: 600; }
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  max-width: 1400px;
+  margin: 0 40px;
+}
+
+.panel {
+  background: #fff;
+  border: 1px solid #dde2ea;
+  border-radius: 6px;
+  padding: 14px 18px;
+}
+
+.panel-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 10px;
+}
+
+.panel--map,
+.panel--timeline { width: 48%; }
+
+#my-map {
+  width:  100%;
+  height: 460px;
+}
+
+.hidden { display: none; }
+
+/* Timeline */
+
+.panel-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.panel-title-row .panel-title { margin-bottom: 0; }
+
+.timeline-controls { display: flex; gap: 8px; }
+
+.timeline-controls button {
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid #6b93c4;
+  background: #fff;
+  color: #3a6ea8;
+  cursor: pointer;
+}
+.timeline-controls button:hover  { background: #eef3fa; }
+.timeline-controls button.active { background: #3a6ea8; color: #fff; }
+
+#timeline-container svg { display: block; }
+
+.x-axis path, .x-axis line,
+.y-axis path, .y-axis line {
+  stroke: #ccc;
+}
+.x-axis text, .y-axis text {
+  fill: #666;
+  font-size: 11px;
+}
+
+.axis-label {
+  fill: #555;
+  font-size: 11px;
+}
+
+.chart-title {
+  fill: #333;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.brush .selection {
+  fill: #a8c4e0;
+  fill-opacity: 0.35;
+  stroke: #6b93c4;
+  stroke-width: 1px;
+}
+.brush .handle { fill: #6b93c4; }
+
+/* Tooltip */
+
+#tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  background: #fff;
+  border: 1px solid #d0d5de;
+  border-radius: 4px;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.12);
+  padding: 6px 10px;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: nowrap;
+  z-index: 1000;
+}
+.tooltip-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: #888;
+}

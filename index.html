@@ -1,48 +1,46 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Cincy311</title>
-    <meta charset="UTF-8">
-    <link rel="icon" href="data:;base64,iVBORwOKGO=" />
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/leaflet.css">
+  <meta charset="UTF-8">
+  <title>Cincinnati 311 — Flooding Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/leaflet.css">
 </head>
 
 <body>
 
-    <div id="my-map"></div>
+  <header>
+    <h1>Cincinnati 311 Service Requests — Flooding, 2025</h1>
+  </header>
 
-    <!-- D3 bundle -->
-    <script src="js/d3.v6.min.js"></script>
-    <script src="js/leaflet.js"></script>
+  <main class="dashboard">
 
-    <!-- graph js files -->
-     <script src="js/main.js"></script>
-     <script src="js/leafletMap.js"></script>
+    <section class="panel panel--map">
+      <h2 class="panel-title">Map</h2>
+      <div id="my-map"></div>
+    </section>
 
-     <div id="tooltip"></div>
+    <section class="panel panel--timeline" id="timeline-section">
+      <div class="panel-title-row">
+        <h2 class="panel-title">Flooding Requests Over Time</h2>
+        <div class="timeline-controls">
+          <button id="brush-toggle" type="button">Enable Date Filter</button>
+          <button id="brush-clear" type="button" class="hidden">Clear Filter</button>
+        </div>
+      </div>
+      <div id="timeline-container"></div>
+    </section>
+
+  </main>
+
+  <div id="tooltip"></div>
+
+  <script src="js/d3.v6.min.js"></script>
+  <script src="js/leaflet.js"></script>
+  <script src="js/timeline.js"></script>
+  <script src="js/leafletMap.js"></script>
+  <script src="js/main.js"></script>
 
 </body>
-
 </html>
-
-<style>
-    #my-map { width: 1200px; height: 500px; }
-
-    #tooltip {
-  position: absolute;
-  opacity: 0;
-  background: #fff;
-  box-shadow: 2px 2px 3px 0px rgb(92 92 92 / 0.5);
-  border: 1px solid #ddd;
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 8px;
-}
-.tooltip-label {
-  font-weight: 500;
-  font-size: 10px;
-  color: #888;
-}
-</style>
