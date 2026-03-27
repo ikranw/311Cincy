@@ -1,32 +1,67 @@
-let leafletMap;
+let leafletMap, mapChoice;
 
-d3.csv("data/subset_data.csv")
+d3.csv("data/subset_data_edited.csv")
   .then((_data) => {
-
-    const floodingData = _data.filter(d =>
-      d.SR_TYPE_DESC === "FLOODING, IN STREET" ||
-      d.SR_TYPE_DESC === "FLOODING, OVERLAND"
+    const floodingData = _data.filter(
+      (d) =>
+        d.SR_TYPE_DESC === "FLOODING, IN STREET" ||
+        d.SR_TYPE_DESC === "FLOODING, OVERLAND",
     );
 
-    floodingData.forEach(d => {
-      d.latitude  = +d.LATITUDE;
+    floodingData.forEach((d) => {
+      d.latitude = +d.LATITUDE;
       d.longitude = +d.LONGITUDE;
+
+      d.daysToComplete = getDays(d.DATE_CREATED, d.DATE_CLOSED);
+    });
+    console.log(floodingData);
+
+    // Leaflet Map
+    leafletMap = new LeafletMap({ parentElement: "#my-map" }, floodingData);
+
+    d3.select("#stadia-map").on("click", () => {
+      leafletMap.changeBasemap("stadia");
+    });
+
+    d3.select("#esri-map").on("click", () => {
+      leafletMap.changeBasemap("esri");
+    });
+
+    d3.select("#map").on("change", (event) => {
+      let mapChoice = event.target.value;
+      console.log(mapChoice);
+      leafletMap.updateVis(mapChoice);
     });
 
     initTimeline(floodingData);
     leafletMap = new LeafletMap({ parentElement: "#my-map" }, floodingData);
 
     const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
-    floodingData.forEach(d => { d.date = parseDate(d.DATE_CREATED); });
+    floodingData.forEach((d) => {
+      d.date = parseDate(d.DATE_CREATED);
+    });
 
     document.addEventListener("timelinebrush", (event) => {
       const { dateStart, dateEnd } = event.detail;
-      leafletMap.Dots.attr("display", d => {
+      leafletMap.Dots.attr("display", (d) => {
         if (dateStart === null) return null;
-        if (d.date === null)    return "none";
-        return (d.date >= dateStart && d.date <= dateEnd) ? null : "none";
+        if (d.date === null) return "none";
+        return d.date >= dateStart && d.date <= dateEnd ? null : "none";
       });
     });
-
   })
-  .catch(error => console.error(error));
+  .catch((error) => console.error(error));
+
+function getDays(date1, date2) {
+  date1 = new Date(date1);
+  date2 = new Date(date2);
+  const d1 = Date.UTC(date1.getFullYear(), date1.getMonth(), date1.getDate());
+  const d2 = Date.UTC(date2.getFullYear(), date2.getMonth(), date2.getDate());
+
+  const differenceMs = Math.abs(d2 - d1);
+
+  const millisecondsPerDay = 1000 * 60 * 60 * 24;
+  const days = Math.floor(differenceMs / millisecondsPerDay);
+
+  return days;
+}
