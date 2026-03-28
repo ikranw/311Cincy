@@ -189,3 +189,13 @@ function drawTimeline(data) {
 function dispatchBrushEvent(dateStart, dateEnd) {
   document.dispatchEvent(new CustomEvent("timelinebrush", { detail: { dateStart, dateEnd } }));
 }
+
+function filterTimelineByData(filteredData) {
+  const filteredDates = new Set(filteredData.map(d => +d.date));
+
+  d3.selectAll(".bar").attr("opacity", d => {
+    const weekEnd = d3.timeWeek.offset(d.week, 1);
+    const inRange = Array.from(filteredDates).some(ts => ts >= +d.week && ts < +weekEnd);
+    return inRange ? 1.0 : 0.35;
+  });
+}

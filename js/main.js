@@ -62,6 +62,8 @@ d3.csv("data/subset_data_edited.csv")
     // UPDATE OTHER VISUALIZATIONS WITH GRAPH BRUSHED DATA
     function updateGraphs(brushedData){
       console.log("Brushed Items: ", brushedData)
+
+      filterTimelineByData(brushedData);
     }
 
     initTimeline(floodingData);
