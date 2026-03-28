@@ -65,7 +65,6 @@ d3.csv("data/subset_data_edited.csv")
     }
 
     initTimeline(floodingData);
-    leafletMap = new LeafletMap({ parentElement: "#my-map" }, floodingData);
 
     const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
     floodingData.forEach((d) => {
