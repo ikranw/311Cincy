@@ -43,25 +43,30 @@ d3.csv("data/subset_data_edited.csv")
     d3.select("#brushToggle").on("click", () => {
       leafletMap.toggleBrush();
 
-      let element = document.getElementById("brushToggle")
+      let element = document.getElementById("brushToggle");
 
-      if(!leafletMap.brushEnabled) {
-        element.classList.remove("button-active")
+      if (!leafletMap.brushEnabled) {
+        element.classList.remove("button-active");
+
+        const container = document.getElementById("timeline-container");
+        container.innerHTML = "";
+
+        initTimeline(floodingData);
       } else {
-        element.classList.add("button-active")
-        updateGraphs(leafletMap.getBrushedItems())
+        element.classList.add("button-active");
+        updateGraphs(leafletMap.getBrushedItems());
       }
     });
 
     document.addEventListener("mapbrush", (event) => {
       const brushedData = leafletMap.getBrushedItems();
 
-      updateGraphs(brushedData)
+      updateGraphs(brushedData);
     });
 
     // UPDATE OTHER VISUALIZATIONS WITH GRAPH BRUSHED DATA
-    function updateGraphs(brushedData){
-      console.log("Brushed Items: ", brushedData)
+    function updateGraphs(brushedData) {
+      console.log("Brushed Items: ", brushedData);
 
       filterTimelineByData(brushedData);
     }
