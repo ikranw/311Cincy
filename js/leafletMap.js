@@ -7,6 +7,7 @@ class LeafletMap {
     this.initVis();
     this.mapChoice = "neighborhood";
     this.brushEnabled = false;
+    this.heatVisible = false;
   }
 
   initVis(background = null) {
@@ -145,6 +146,14 @@ class LeafletMap {
       vis.brushCircle.style("display", vis.brushEnabled ? "block" : "none");
     };
 
+    const heatPoints = vis.data.map((d) => [d.latitude, d.longitude, 0.1]);
+    vis.heatLayer = L.heatLayer(heatPoints, {
+      radius: 80,
+      blur: 20,
+      max: 0.1,
+    }).addTo(vis.theMap);
+    vis.heatLayer.remove();
+
     vis.theMap.on("zoom move", () => {
       vis.updateVis();
       vis.updateBrushedItems(false);
@@ -257,7 +266,6 @@ class LeafletMap {
   }
 
   updateBrushedItems(dispatch = false) {
-
     let vis = this;
 
     if (!vis.brushEnabled) return;
@@ -285,15 +293,28 @@ class LeafletMap {
   }
 
   toggleBrush() {
-    let vis = this
+    let vis = this;
 
     vis.brushEnabled = !vis.brushEnabled;
     vis.brushCircle.style("display", vis.brushEnabled ? "block" : "none");
   }
 
-  setFilteredData(filteredData) {
-    let vis = this
+  toggleHeat() {
+    let vis = this;
+    vis.heatVisible = !vis.heatVisible;
 
-  vis.Dots.attr("display", d => filteredData.includes(d) ? null : "none");
-}
+    if (vis.heatVisible) {
+      vis.heatLayer.addTo(vis.theMap);
+      vis.Dots.attr("display", "none");
+    } else {
+      vis.heatLayer.remove();
+      vis.Dots.attr("display", null);
+    }
+  }
+
+  setFilteredData(filteredData) {
+    let vis = this;
+
+    vis.Dots.attr("display", (d) => (filteredData.includes(d) ? null : "none"));
+  }
 }

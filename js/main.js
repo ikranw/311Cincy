@@ -58,6 +58,18 @@ d3.csv("data/subset_data_edited.csv")
       }
     });
 
+    d3.select("#heatToggle").on("click", () => {
+      leafletMap.toggleHeat()
+
+      let element = document.getElementById("heatToggle");
+
+      if(!leafletMap.heatVisible) {
+        element.classList.remove("button-active");
+      } else {
+        element.classList.add("button-active");
+      }
+    })
+
     document.addEventListener("mapbrush", (event) => {
       const brushedData = leafletMap.getBrushedItems();
 
