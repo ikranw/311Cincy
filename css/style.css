@@ -120,7 +120,19 @@ header h1 { font-size: 18px; font-weight: 600; }
   z-index: 1000;
 }
 .tooltip-label {
-  font-size: 10px;
+  font-size: 16px;
   font-weight: 500;
   color: #888;
 }
+
+.map-button {
+  font-size: 20px;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid #6b93c4;
+  background: #fff;
+  color: #3a6ea8;
+  cursor: pointer;
+}
+
+.button-active { background: #3a6ea8; color: #fff; }

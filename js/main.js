@@ -21,10 +21,16 @@ d3.csv("data/subset_data_edited.csv")
 
     d3.select("#stadia-map").on("click", () => {
       leafletMap.changeBasemap("stadia");
+
+      document.getElementById("stadia-map").classList.add("button-active");
+      document.getElementById("esri-map").classList.remove("button-active");
     });
 
     d3.select("#esri-map").on("click", () => {
       leafletMap.changeBasemap("esri");
+
+      document.getElementById("stadia-map").classList.remove("button-active");
+      document.getElementById("esri-map").classList.add("button-active");
     });
 
     d3.select("#map").on("change", (event) => {
@@ -32,6 +38,23 @@ d3.csv("data/subset_data_edited.csv")
       console.log(mapChoice);
       leafletMap.updateVis(mapChoice);
     });
+
+    // display brush
+    d3.select("#brushToggle").on("click", () => {
+      leafletMap.toggleBrush();
+      updateGraphs(leafletMap.getBrushedItems())
+    });
+
+    document.addEventListener("mapbrush", (event) => {
+      const brushedData = leafletMap.getBrushedItems();
+
+      updateGraphs(brushedData)
+    });
+
+    // UPDATE OTHER VISUALIZATIONS WITH GRAPH BRUSHED DATA
+    function updateGraphs(brushedData){
+      console.log("Brushed Items: ", brushedData)
+    }
 
     initTimeline(floodingData);
     leafletMap = new LeafletMap({ parentElement: "#my-map" }, floodingData);

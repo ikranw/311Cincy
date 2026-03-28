@@ -6,6 +6,7 @@ class LeafletMap {
     this.data = _data;
     this.initVis();
     this.mapChoice = "neighborhood";
+    this.brushEnabled = false;
   }
 
   initVis(background = null) {
@@ -38,20 +39,20 @@ class LeafletMap {
     vis.overlay = d3.select(vis.theMap.getPanes().overlayPane);
     vis.svg = vis.overlay.select("svg").attr("pointer-events", "auto");
 
-    let range = []
+    let range = [];
 
     vis.data.forEach((item, index) => {
-        if (!range.includes(item.NEIGHBORHOOD)) {
-          range.push(item.NEIGHBORHOOD);
-        }
-      });
+      if (!range.includes(item.NEIGHBORHOOD)) {
+        range.push(item.NEIGHBORHOOD);
+      }
+    });
 
-      vis.colorPalette = d3
-        .scaleOrdinal()
-        .domain(range)
-        .range(d3.schemeCategory10);
+    vis.colorPalette = d3
+      .scaleOrdinal()
+      .domain(range)
+      .range(d3.schemeCategory10);
 
-      vis.colorAccessor = (d) => vis.colorPalette(d.NEIGHBORHOOD);
+    vis.colorAccessor = (d) => vis.colorPalette(d.NEIGHBORHOOD);
 
     vis.Dots = vis.svg
       .selectAll("circle")
@@ -83,7 +84,7 @@ class LeafletMap {
           // Format number with million and thousand separator
           //***** TO DO- change this tooltip to show useful information about the quakes
           .html(
-            `<div class="tooltip-label"><p>Neighborhood: ${d.NEIGHBORHOOD}</p><p>Date Created: ${d3.utcFormat("%B %d, %Y")(new Date(d.DATE_CREATED))}</p><p>Priority: ${d.PRIORITY == '' ? "Not Specified" : d.PRIORITY}</p><p>Responding Department: ${d.DEPT_NAME}</p></div>`,
+            `<div class="tooltip-label"><p>Neighborhood: ${d.NEIGHBORHOOD}</p><p>Date Created: ${d3.utcFormat("%B %d, %Y")(new Date(d.DATE_CREATED))}</p><p>Priority: ${d.PRIORITY == "" ? "Not Specified" : d.PRIORITY}</p><p>Responding Department: ${d.DEPT_NAME}</p></div>`,
           );
       })
       .on("mousemove", (event) => {
@@ -103,9 +104,54 @@ class LeafletMap {
         d3.select("#tooltip").style("opacity", 0); //turn off the tooltip
       });
 
-    //handler here for updating the map, as you zoom in and out
-    vis.theMap.on("zoomend", function () {
-      vis.updateVis(mapChoice);
+    vis.brushRadius = 75;
+    vis.brushEnabled = true;
+
+    // Create brush circle
+    vis.brushCircle = vis.svg
+      .append("g")
+      .append("circle")
+      .attr("cx", 200) // initial x position
+      .attr("cy", 200) // initial y position
+      .attr("r", vis.brushRadius)
+      .attr("fill", "rgba(168, 196, 224, 0.35)")
+      .attr("stroke", "#6b93c4")
+      .attr("stroke-width", 2)
+      .style("cursor", "move")
+      .style("display", "none")
+      .call(
+        d3
+          .drag()
+          .on("start", () => {
+            if (!vis.brushEnabled) return;
+            vis.theMap.dragging.disable();
+          })
+
+          .on("drag", (event) => {
+            if (!vis.brushEnabled) return;
+            vis.brushCircle.attr("cx", event.x).attr("cy", event.y);
+            vis.updateBrushedItems(false);
+          })
+
+          .on("end", () => {
+            if (!vis.brushEnabled) return;
+            vis.theMap.dragging.enable();
+            vis.updateBrushedItems(true);
+          }),
+      );
+
+    vis.toggleBrush = () => {
+      vis.brushEnabled = !vis.brushEnabled;
+      vis.brushCircle.style("display", vis.brushEnabled ? "block" : "none");
+    };
+
+    vis.theMap.on("zoom move", () => {
+      vis.updateVis();
+      vis.updateBrushedItems(false);
+    });
+
+    vis.theMap.on("zoomend moveend", () => {
+      vis.updateBrushedItems(true);
     });
   }
 
@@ -154,7 +200,7 @@ class LeafletMap {
       });
 
       vis.colorAccessor = (d) => vis.colorPalette(d.DEPT_NAME);
-    } else if(vis.mapChoice == "daysToComplete") {
+    } else if (vis.mapChoice == "daysToComplete") {
       vis.colorPalette = d3
         .scaleOrdinal()
         .domain([5, 10])
@@ -193,5 +239,55 @@ class LeafletMap {
       });
     }
     vis.base_layer.addTo(vis.theMap);
+  }
+
+  getBrushedItems() {
+    let vis = this;
+
+    const cx = parseFloat(vis.brushCircle.attr("cx"));
+    const cy = parseFloat(vis.brushCircle.attr("cy"));
+    const r = parseFloat(vis.brushCircle.attr("r"));
+
+    return vis.data.filter((d) => {
+      const p = vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]);
+      const dx = p.x - cx;
+      const dy = p.y - cy;
+      return Math.sqrt(dx * dx + dy * dy) <= r;
+    });
+  }
+
+  updateBrushedItems(dispatch = false) {
+
+    let vis = this;
+
+    if (!vis.brushEnabled) return;
+
+    const cx = parseFloat(vis.brushCircle.attr("cx"));
+    const cy = parseFloat(vis.brushCircle.attr("cy"));
+    const r = vis.brushRadius;
+
+    const brushedData = vis.data.filter((d) => {
+      const p = vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]);
+      const dx = p.x - cx;
+      const dy = p.y - cy;
+      return Math.sqrt(dx * dx + dy * dy) <= r;
+    });
+
+    vis.Dots.classed("selected", (d) => brushedData.includes(d));
+
+    if (dispatch) {
+      document.dispatchEvent(
+        new CustomEvent("mapbrush", {
+          detail: { brushedData },
+        }),
+      );
+    }
+  }
+
+  toggleBrush() {
+    let vis = this
+
+    vis.brushEnabled = !vis.brushEnabled;
+    vis.brushCircle.style("display", vis.brushEnabled ? "block" : "none");
   }
 }

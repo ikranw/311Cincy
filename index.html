@@ -19,7 +19,8 @@
     <section class="panel panel--map">
       <h2 class="panel-title">Map</h2>
       <div id="my-map"></div>
-      <div>
+      <div style="display: flex">
+        <div>
         <label for="map">Choose Option:</label>
 
         <select name="map" id="map">
@@ -31,9 +32,11 @@
     </div>
 
     <div>
-        <button id="stadia-map">Stadia</button>
-        <button id="esri-map">ESRI</button>
+        <button class="map-button button-active" id="stadia-map">Stadia</button>
+        <button class="map-button" id="esri-map">ESRI</button>
+        <button id="brushToggle">Toggle Brush</button>
     </div>
+      </div>
     </section>
 
     <section class="panel panel--timeline" id="timeline-section">
@@ -53,9 +56,13 @@
 
   <script src="js/d3.v6.min.js"></script>
   <script src="js/leaflet.js"></script>
+  <script src="js/leaflet-heat.js"></script>
   <script src="js/timeline.js"></script>
   <script src="js/leafletMap.js"></script>
   <script src="js/main.js"></script>
 
 </body>
 </html>
+
+<style>
+  </style>
