@@ -42,7 +42,15 @@ d3.csv("data/subset_data_edited.csv")
     // display brush
     d3.select("#brushToggle").on("click", () => {
       leafletMap.toggleBrush();
-      updateGraphs(leafletMap.getBrushedItems())
+
+      let element = document.getElementById("brushToggle")
+
+      if(!leafletMap.brushEnabled) {
+        element.classList.remove("button-active")
+      } else {
+        element.classList.add("button-active")
+        updateGraphs(leafletMap.getBrushedItems())
+      }
     });
 
     document.addEventListener("mapbrush", (event) => {

@@ -17,25 +17,27 @@
   <main class="dashboard">
 
     <section class="panel panel--map">
-      <h2 class="panel-title">Map</h2>
+      <div class="panel-title-row">
+        <h2 class="panel-title">Map</h2>
+        <button class="map-button" id="brushToggle">Toggle Brush</button>
+      </div>
       <div id="my-map"></div>
-      <div style="display: flex">
+      <div class="panel-title-row">
         <div>
-        <label for="map">Choose Option:</label>
+          <label style="font-size: 16px" for="map">Choose Option:</label>
 
-        <select name="map" id="map">
+          <select class="axis-label" style="font-size: 16px" name="map" id="map">
             <option value="neighborhood">Neighborhood</option>
             <option value="priority">Priority</option>
             <option value="agency">Agency</option>
             <option value="daysToComplete">Days To Complete</option>
-        </select>
-    </div>
+          </select>
+        </div>
 
-    <div>
-        <button class="map-button button-active" id="stadia-map">Stadia</button>
-        <button class="map-button" id="esri-map">ESRI</button>
-        <button id="brushToggle">Toggle Brush</button>
-    </div>
+        <div>
+          <button class="map-button button-active" id="stadia-map">Stadia</button>
+          <button class="map-button" id="esri-map">ESRI</button>
+        </div>
       </div>
     </section>
 
@@ -62,7 +64,8 @@
   <script src="js/main.js"></script>
 
 </body>
+
 </html>
 
 <style>
-  </style>
+</style>

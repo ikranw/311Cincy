@@ -290,4 +290,10 @@ class LeafletMap {
     vis.brushEnabled = !vis.brushEnabled;
     vis.brushCircle.style("display", vis.brushEnabled ? "block" : "none");
   }
+
+  setFilteredData(filteredData) {
+    let vis = this
+
+  vis.Dots.attr("display", d => filteredData.includes(d) ? null : "none");
+}
 }
