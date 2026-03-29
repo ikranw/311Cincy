@@ -53,6 +53,7 @@ d3.csv("data/subset_data_edited.csv")
 
         initTimeline(floodingData);
         initNeighborhoodChart(floodingData);
+        initMethodChart(floodingData);
       } else {
         element.classList.add("button-active");
         updateGraphs(leafletMap.getBrushedItems());
@@ -83,10 +84,12 @@ d3.csv("data/subset_data_edited.csv")
 
       filterTimelineByData(brushedData);
       updateNeighborhoodChart(brushedData);
+      updateMethodChart(brushedData);
     }
 
     initTimeline(floodingData);
     initNeighborhoodChart(floodingData);
+    initMethodChart(floodingData);
 
     const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
     floodingData.forEach((d) => {
