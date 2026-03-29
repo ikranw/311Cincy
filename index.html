@@ -15,34 +15,53 @@
   </header>
 
   <main class="dashboard">
-
-    <section class="panel panel--map">
-      <div class="panel-title-row">
-        <h2 class="panel-title">Map</h2>
-        <div>
-          <button class="map-button" id="brushToggle">Toggle Brush</button>
-        <button class="map-button" id="heatToggle">Toggle Heatmap</button>
+    <div class="dashboard-top-row">
+      <section class="panel panel--map">
+        <div class="panel-title-row">
+          <h2 class="panel-title">Map</h2>
+          <div>
+            <button class="map-button" id="brushToggle">Toggle Brush</button>
+          <button class="map-button" id="heatToggle">Toggle Heatmap</button>
+          </div>
         </div>
+        <div id="my-map"></div>
+        <div class="panel-title-row">
+          <div>
+            <label style="font-size: 16px" for="map">Choose Option:</label>
+
+            <select class="axis-label" style="font-size: 16px" name="map" id="map">
+              <option value="neighborhood">Neighborhood</option>
+              <option value="priority">Priority</option>
+              <option value="agency">Agency</option>
+              <option value="daysToComplete">Days To Complete</option>
+            </select>
+          </div>
+
+          <div>
+            <button class="map-button button-active" id="stadia-map">Stadia</button>
+            <button class="map-button" id="esri-map">ESRI</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="chart-column">
+        <section class="panel panel--sidechart" id="neighborhood-section">
+          <div class="panel-title-row">
+            <h2 class="panel-title">Top 10 Neighborhoods by Most Flooding Requests</h2>
+          </div>
+          <div id="neighborhood-container"></div>
+        </section>
+
+        <section class="panel panel--sidechart" id="method-section">
+          <div class="panel-title-row">
+            <h2 class="panel-title">Method Chart</h2>
+          </div>
+          <div id="method-container"></div>
+        </section>
+
+       
       </div>
-      <div id="my-map"></div>
-      <div class="panel-title-row">
-        <div>
-          <label style="font-size: 16px" for="map">Choose Option:</label>
-
-          <select class="axis-label" style="font-size: 16px" name="map" id="map">
-            <option value="neighborhood">Neighborhood</option>
-            <option value="priority">Priority</option>
-            <option value="agency">Agency</option>
-            <option value="daysToComplete">Days To Complete</option>
-          </select>
-        </div>
-
-        <div>
-          <button class="map-button button-active" id="stadia-map">Stadia</button>
-          <button class="map-button" id="esri-map">ESRI</button>
-        </div>
-      </div>
-    </section>
+    </div>
 
     <section class="panel panel--timeline" id="timeline-section">
       <div class="panel-title-row">
@@ -55,6 +74,12 @@
       <div id="timeline-container"></div>
     </section>
 
+     <section class="panel panel--sidechart" id="department-section">
+          <div class="panel-title-row">
+            <h2 class="panel-title">Department Chart</h2>
+          </div>
+          <div id="department-container"></div>
+        </section>
   </main>
 
   <div id="tooltip"></div>
@@ -63,6 +88,7 @@
   <script src="js/leaflet.js"></script>
   <script src="js/leaflet-heat.js"></script>
   <script src="js/timeline.js"></script>
+  <script src="js/neighborhood.js"></script>
   <script src="js/leafletMap.js"></script>
   <script src="js/main.js"></script>
 

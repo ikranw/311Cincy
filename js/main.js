@@ -52,6 +52,7 @@ d3.csv("data/subset_data_edited.csv")
         container.innerHTML = "";
 
         initTimeline(floodingData);
+        initNeighborhoodChart(floodingData);
       } else {
         element.classList.add("button-active");
         updateGraphs(leafletMap.getBrushedItems());
@@ -81,9 +82,11 @@ d3.csv("data/subset_data_edited.csv")
       console.log("Brushed Items: ", brushedData);
 
       filterTimelineByData(brushedData);
+      updateNeighborhoodChart(brushedData);
     }
 
     initTimeline(floodingData);
+    initNeighborhoodChart(floodingData);
 
     const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
     floodingData.forEach((d) => {

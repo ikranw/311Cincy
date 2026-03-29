@@ -23,6 +23,25 @@ header h1 { font-size: 18px; font-weight: 600; }
   margin: 0 40px;
 }
 
+.dashboard-top-row {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+
+.dashboard-top-row .panel--map,
+.dashboard-top-row .chart-column {
+  flex: 1 1 0;
+  width: auto;
+}
+
+.chart-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .panel {
   background: #fff;
   border: 1px solid #dde2ea;
@@ -42,9 +61,22 @@ header h1 { font-size: 18px; font-weight: 600; }
 .panel--map,
 .panel--timeline { width: 48%; }
 
+.panel--department {
+  width: 48%;
+}
+
+.panel--sidechart {
+  width: 100%;
+}
+
 #my-map {
   width:  100%;
   height: 460px;
+}
+
+#neighborhood-container,
+#method-container, #department-container {
+  min-height: 200px;
 }
 
 .hidden { display: none; }
@@ -73,7 +105,8 @@ header h1 { font-size: 18px; font-weight: 600; }
 .timeline-controls button:hover  { background: #eef3fa; }
 .timeline-controls button.active { background: #3a6ea8; color: #fff; }
 
-#timeline-container svg { display: block; }
+#timeline-container svg,
+#neighborhood-container svg { display: block; }
 
 .x-axis path, .x-axis line,
 .y-axis path, .y-axis line {
@@ -94,6 +127,16 @@ header h1 { font-size: 18px; font-weight: 600; }
   font-size: 13px;
   font-weight: 600;
 }
+
+.neighborhood-bar {
+  fill: #6b93c4;
+}
+
+.neighborhood-value {
+  fill: #333;
+  font-size: 11px;
+}
+
 
 .brush .selection {
   fill: #a8c4e0;
