@@ -5,7 +5,7 @@ class NeighborhoodChart {
     this.config = {
       parentElement: _config.parentElement,
       margin: { top: 8, right: 24, bottom: 40, left: 130 },
-      height: 220
+      height: 300
     };
     this.data = _data;
     this.initVis();
@@ -47,7 +47,15 @@ class NeighborhoodChart {
       .attr("x", vis.innerWidth / 2)
       .attr("y", vis.innerHeight + 32)
       .attr("text-anchor", "middle")
-      .text("Count");
+      .text("# of Requests");
+
+    vis.yAxisLabel = vis.chart.append("text")
+      .attr("class", "axis-label")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -(vis.innerHeight / 2))
+      .attr("y", -120)
+      .attr("text-anchor", "middle")
+      .text("Neighborhoods");
 
     vis.tooltip = d3.select("#tooltip");
 
@@ -70,7 +78,8 @@ class NeighborhoodChart {
       (d) => d.NEIGHBORHOOD.trim()
     )
       .map(([name, count]) => ({ name, count }))
-      .sort((a, b) => d3.descending(a.count, b.count));
+      .sort((a, b) => d3.descending(a.count, b.count))
+      .slice(0, 11);
 
     vis.chart.selectAll(".empty-state").remove();
 
@@ -92,6 +101,7 @@ class NeighborhoodChart {
     vis.yAxisGroup.call(d3.axisLeft(vis.yScale));
 
     vis.xAxisLabel.attr("x", vis.innerWidth / 2);
+    vis.yAxisLabel.attr("x", -(vis.innerHeight / 2));
 
     vis.bars = vis.chart.selectAll(".neighborhood-bar")
       .data(vis.chartData, (d) => d.name)

@@ -23,23 +23,23 @@ header h1 { font-size: 18px; font-weight: 600; }
   margin: 0 40px;
 }
 
-.dashboard-top-row {
+.dashboard-columns {
   display: flex;
   gap: 16px;
   align-items: flex-start;
 }
 
-
-.dashboard-top-row .panel--map,
-.dashboard-top-row .chart-column {
+.left-column,
+.right-column {
   flex: 1 1 0;
-  width: auto;
-}
-
-.chart-column {
   display: flex;
   flex-direction: column;
   gap: 16px;
+}
+
+.left-column .panel,
+.right-column .panel {
+  width: 100%;
 }
 
 .panel {
@@ -56,13 +56,6 @@ header h1 { font-size: 18px; font-weight: 600; }
   text-transform: uppercase;
   letter-spacing: 0.04em;
   margin-bottom: 10px;
-}
-
-.panel--map,
-.panel--timeline { width: 48%; }
-
-.panel--department {
-  width: 48%;
 }
 
 .panel--sidechart {
