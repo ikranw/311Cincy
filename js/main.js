@@ -58,22 +58,15 @@ d3.csv("data/subset_data_edited.csv")
       (d) => d.serviceTypeLabel === "Flooding",
     );
 
+    const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
     serviceData.forEach((d) => {
       d.latitude = +d.LATITUDE;
       d.longitude = +d.LONGITUDE;
-    });
-
-    floodingData.forEach((d) => {
-
       d.daysToComplete = getDays(d.DATE_CREATED, d.DATE_CLOSED);
 
       if (d.PRIORITY === "") {
         d.PRIORITY = "Not Specified";
       }
-    });
-
-    const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
-    floodingData.forEach((d) => {
       d.date = parseDate(d.DATE_CREATED);
     });
 
@@ -100,11 +93,11 @@ d3.csv("data/subset_data_edited.csv")
     leafletMap.setServiceTypeColors(serviceTypeColors);
     priorityChart = new PriorityChart(
       { parentElement: "#priority-container" },
-      floodingData,
+      getSelectedServiceData(),
     );
     serviceTypeChart = new ServiceTypeChart(
       { parentElement: "#service-container" },
-      floodingData,
+      getSelectedServiceData(),
     );
     initServiceTypeControls();
 
@@ -140,7 +133,7 @@ d3.csv("data/subset_data_edited.csv")
         const container = document.getElementById("timeline-container");
         container.innerHTML = "";
 
-        initTimeline(floodingData);
+        initTimeline(getSelectedServiceData());
         renderLinkedViews();
       } else {
         element.classList.add("button-active");
@@ -178,12 +171,18 @@ d3.csv("data/subset_data_edited.csv")
       renderLinkedViews();
     });
 
+    function getSelectedServiceData() {
+      return serviceData.filter((d) => selectedServiceTypes.has(d.serviceTypeLabel));
+    }
+
     function getMapFilteredData() {
+      const selectedServiceData = getSelectedServiceData();
+
       if (leafletMap.brushEnabled && leafletMap.hasActiveBrush) {
-        return leafletMap.getBrushedItems();
+        return leafletMap.getBrushedItems(selectedServiceData);
       }
 
-      return floodingData;
+      return selectedServiceData;
     }
 
     function filterByTimelineSelection(data) {
@@ -230,7 +229,7 @@ d3.csv("data/subset_data_edited.csv")
         if (
           excludedChart !== "serviceType" &&
           linkedSelections.serviceType.size > 0 &&
-          !linkedSelections.serviceType.has(d.SR_TYPE_DESC)
+          !linkedSelections.serviceType.has(d.serviceTypeLabel)
         )
           return false;
 
@@ -275,21 +274,21 @@ d3.csv("data/subset_data_edited.csv")
       );
 
       if (priorityChart) {
-        priorityChart.updateData(fullyFilteredData);
+        priorityChart.updateData(fullyFilteredData, linkedSelections.priority);
       }
 
       if (serviceTypeChart) {
-        serviceTypeChart.updateData(fullyFilteredData);
+        serviceTypeChart.updateData(fullyFilteredData, linkedSelections.serviceType);
       }
 
       // add charts to be linked/brushed
       // updateFutureChart(filterByLinkedSelections(baseData, "futureChartKey"), linkedSelections.futureChartKey);
     }
 
-    initTimeline(floodingData);
-    initNeighborhoodChart(floodingData, linkedSelections.neighborhood);
-    initMethodChart(floodingData, linkedSelections.method);
-    initDepartmentChart(floodingData, linkedSelections.department);
+    initTimeline(getSelectedServiceData());
+    initNeighborhoodChart(getSelectedServiceData(), linkedSelections.neighborhood);
+    initMethodChart(getSelectedServiceData(), linkedSelections.method);
+    initDepartmentChart(getSelectedServiceData(), linkedSelections.department);
     renderLinkedViews();
 
     document.addEventListener("timelinebrush", (event) => {
@@ -330,7 +329,17 @@ d3.csv("data/subset_data_edited.csv")
               selectedServiceTypes.delete(definition.key);
             }
 
+            linkedSelections.serviceType.forEach((serviceType) => {
+              if (!selectedServiceTypes.has(serviceType)) {
+                linkedSelections.serviceType.delete(serviceType);
+              }
+            });
+
             leafletMap.setSelectedServiceTypes(selectedServiceTypes);
+            const container = document.getElementById("timeline-container");
+            container.innerHTML = "";
+            initTimeline(getSelectedServiceData());
+            renderLinkedViews();
           });
         }
 
