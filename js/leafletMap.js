@@ -31,7 +31,7 @@ class LeafletMap {
     });
 
     vis.theMap = L.map("my-map", {
-      center: [39.15, -84.548],
+      center: [39.15, -84.515],
       zoom: 12,
       layers: [vis.base_layer],
     });
@@ -113,8 +113,8 @@ class LeafletMap {
     vis.brushCircle = vis.svg
       .append("g")
       .append("circle")
-      .attr("cx", 200) // initial x position
-      .attr("cy", 200) // initial y position
+      .attr("cx", 325) // initial x position
+      .attr("cy", 225) // initial y position
       .attr("r", vis.brushRadius)
       .attr("fill", "rgba(168, 196, 224, 0.35)")
       .attr("stroke", "#6b93c4")
