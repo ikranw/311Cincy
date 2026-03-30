@@ -6,7 +6,7 @@ class MethodChart {
       parentElement: _config.parentElement,
       margin: { top: 12, right: 12, bottom: 12, left: 12 },
       width: 360,
-      height: 240
+      height: 210
     };
     this.data = _data;
     this.selectedMethods = new Set();

@@ -4,8 +4,8 @@ class ServiceTypeChart {
   constructor(_config, _data) {
     this.config = {
       parentElement: _config.parentElement,
-      margin: { top: 12, right: 24, bottom: 42, left: 180 },
-      height: 280
+      margin: { top: 10, right: 16, bottom: 32, left: 138 },
+      height: 210
     };
     this.data = _data;
     this.initVis();

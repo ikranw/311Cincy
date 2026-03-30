@@ -4,8 +4,8 @@ class NeighborhoodChart {
   constructor(_config, _data) {
     this.config = {
       parentElement: _config.parentElement,
-      margin: { top: 8, right: 24, bottom: 40, left: 130 },
-      height: 300
+      margin: { top: 8, right: 16, bottom: 32, left: 108 },
+      height: 255
     };
     this.data = _data;
     this.selectedNeighborhoods = new Set();

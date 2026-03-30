@@ -4,8 +4,8 @@ class DepartmentChart {
   constructor(_config, _data) {
     this.config = {
       parentElement: _config.parentElement,
-      margin: { top: 12, right: 24, bottom: 42, left: 160 },
-      height: 280
+      margin: { top: 10, right: 16, bottom: 32, left: 146 },
+      height: 210
     };
     this.data = _data;
     this.selectedDepartments = new Set();
@@ -54,7 +54,7 @@ class DepartmentChart {
       .attr("class", "axis-label")
       .attr("transform", "rotate(-90)")
       .attr("x", -(vis.innerHeight / 2))
-      .attr("y", -140)
+      .attr("y", -128)
       .attr("text-anchor", "middle")
       .text("Service Department");
 

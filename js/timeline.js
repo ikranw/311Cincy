@@ -1,6 +1,6 @@
 const TL = {
-  margin: { top: 36, right: 30, bottom: 52, left: 52 },
-  height: 230
+  margin: { top: 28, right: 18, bottom: 52, left: 54 },
+  height: 235
 };
 
 const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
@@ -57,7 +57,7 @@ function drawTimeline(data) {
   svg.append("text")
     .attr("class", "axis-label")
     .attr("x", innerWidth / 2)
-    .attr("y", innerHeight + 44)
+    .attr("y", innerHeight + 46)
     .attr("text-anchor", "middle")
     .text("Week (2025)");
 
@@ -65,7 +65,7 @@ function drawTimeline(data) {
     .attr("class", "axis-label")
     .attr("transform", "rotate(-90)")
     .attr("x", -(innerHeight / 2))
-    .attr("y", -40)
+    .attr("y", -42)
     .attr("text-anchor", "middle")
     .text("# of Requests");
 
