@@ -14,8 +14,8 @@ d3.csv("data/subset_data_edited.csv")
 
       d.daysToComplete = getDays(d.DATE_CREATED, d.DATE_CLOSED);
 
-      if(d.PRIORITY === "") {
-        d.PRIORITY = "Not Specified"
+      if (d.PRIORITY === "") {
+        d.PRIORITY = "Not Specified";
       }
     });
 
@@ -28,6 +28,8 @@ d3.csv("data/subset_data_edited.csv")
       neighborhood: new Set(),
       method: new Set(),
       department: new Set(),
+      serviceType: new Set(),
+      priority: new Set(),
     };
     let timelineFilter = { dateStart: null, dateEnd: null };
 
@@ -35,8 +37,14 @@ d3.csv("data/subset_data_edited.csv")
 
     // Leaflet Map
     leafletMap = new LeafletMap({ parentElement: "#my-map" }, floodingData);
-    priorityChart = new PriorityChart({ parentElement: "#priority-container" }, floodingData);
-    serviceTypeChart = new ServiceTypeChart({ parentElement: "#service-container" }, floodingData);
+    priorityChart = new PriorityChart(
+      { parentElement: "#priority-container" },
+      floodingData,
+    );
+    serviceTypeChart = new ServiceTypeChart(
+      { parentElement: "#service-container" },
+      floodingData,
+    );
 
     d3.select("#stadia-map").on("click", () => {
       leafletMap.changeBasemap("stadia");
@@ -117,13 +125,18 @@ d3.csv("data/subset_data_edited.csv")
     }
 
     function filterByTimelineSelection(data) {
-      if (timelineFilter.dateStart === null || timelineFilter.dateEnd === null) {
+      if (
+        timelineFilter.dateStart === null ||
+        timelineFilter.dateEnd === null
+      ) {
         return data;
       }
 
       return data.filter((d) => {
         if (d.date === null) return false;
-        return d.date >= timelineFilter.dateStart && d.date <= timelineFilter.dateEnd;
+        return (
+          d.date >= timelineFilter.dateStart && d.date <= timelineFilter.dateEnd
+        );
       });
     }
 
@@ -152,6 +165,19 @@ d3.csv("data/subset_data_edited.csv")
         ) {
           return false;
         }
+        if (
+          excludedChart !== "serviceType" &&
+          linkedSelections.serviceType.size > 0 &&
+          !linkedSelections.serviceType.has(d.SR_TYPE_DESC)
+        )
+          return false;
+
+        if (
+          excludedChart !== "priority" &&
+          linkedSelections.priority.size > 0 &&
+          !linkedSelections.priority.has(d.PRIORITY)
+        )
+          return false;
 
         return true;
       });
@@ -166,28 +192,28 @@ d3.csv("data/subset_data_edited.csv")
       filterTimelineByData(fullyFilteredData);
       leafletMap.setFilteredData(fullyFilteredData);
 
-      console.log(fullyFilteredData)
+      console.log(fullyFilteredData);
 
       updateNeighborhoodChart(
         filterByLinkedSelections(baseData, "neighborhood"),
-        linkedSelections.neighborhood
+        linkedSelections.neighborhood,
       );
       updateMethodChart(
         filterByLinkedSelections(baseData, "method"),
-        linkedSelections.method
+        linkedSelections.method,
       );
       updateDepartmentChart(
         filterByLinkedSelections(baseData, "department"),
-        linkedSelections.department
+        linkedSelections.department,
       );
 
-        if (priorityChart) {
-    priorityChart.updateData(fullyFilteredData);
-  }
+      if (priorityChart) {
+        priorityChart.updateData(fullyFilteredData);
+      }
 
-  if (serviceTypeChart) {
-    serviceTypeChart.updateData(fullyFilteredData);
-  }
+      if (serviceTypeChart) {
+        serviceTypeChart.updateData(fullyFilteredData);
+      }
 
       // add charts to be linked/brushed
       // updateFutureChart(filterByLinkedSelections(baseData, "futureChartKey"), linkedSelections.futureChartKey);

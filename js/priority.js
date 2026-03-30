@@ -126,6 +126,13 @@ class PriorityChart {
       .on("mouseout", function () {
         d3.select(this).attr("fill", "#4e79a7");
         vis.tooltip.style("display", "none");
+      })
+      .on("click", (event, d) => {
+        document.dispatchEvent(
+          new CustomEvent("chartselectionchange", {
+            detail: { chart: "priority", value: d.priority },
+          })
+        );
       });
 
     // Draw values
