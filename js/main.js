@@ -1,16 +1,69 @@
 let leafletMap, mapChoice;
 
+const serviceTypeDefinitions = [
+  {
+    key: "Flooding",
+    defaultColor: "#6b93c4",
+    match: (d) =>
+      d.SR_TYPE_DESC === "FLOODING, IN STREET" ||
+      d.SR_TYPE_DESC === "FLOODING, OVERLAND",
+  },
+  {
+    key: "Potholes",
+    defaultColor: "#f28e2b",
+    match: (d) => d.SR_TYPE === "PTHOLE",
+  },
+  {
+    key: "Slippery Streets",
+    defaultColor: "#b07aa1",
+    match: (d) => d.SR_TYPE === "SLPYST",
+  },
+  {
+    key: "Leaks",
+    defaultColor: "#4e79a7",
+    match: (d) => d.SR_TYPE === "WTRLKSBK",
+  },
+  {
+    key: "Fire Hydrant Repair",
+    defaultColor: "#e15759",
+    match: (d) => d.SR_TYPE === "FRHYDNTR",
+  },
+  {
+    key: "Street Lights Repair",
+    defaultColor: "#edc948",
+    match: (d) => d.SR_TYPE === "STRTLITE",
+  },
+  {
+    key: "Public Litter",
+    defaultColor: "#59a14f",
+    match: (d) => d.SR_TYPE === "LTRSTPNH",
+  },
+];
+
 d3.csv("data/subset_data_edited.csv")
   .then((_data) => {
-    const floodingData = _data.filter(
-      (d) =>
-        d.SR_TYPE_DESC === "FLOODING, IN STREET" ||
-        d.SR_TYPE_DESC === "FLOODING, OVERLAND",
+    const serviceData = _data
+      .map((d) => {
+        const serviceType = serviceTypeDefinitions.find((item) => item.match(d));
+        if (!serviceType) return null;
+
+        return {
+          ...d,
+          serviceTypeLabel: serviceType.key,
+        };
+      })
+      .filter((d) => d !== null);
+
+    const floodingData = serviceData.filter(
+      (d) => d.serviceTypeLabel === "Flooding",
     );
 
-    floodingData.forEach((d) => {
+    serviceData.forEach((d) => {
       d.latitude = +d.LATITUDE;
       d.longitude = +d.LONGITUDE;
+    });
+
+    floodingData.forEach((d) => {
 
       d.daysToComplete = getDays(d.DATE_CREATED, d.DATE_CLOSED);
 
@@ -23,6 +76,11 @@ d3.csv("data/subset_data_edited.csv")
     floodingData.forEach((d) => {
       d.date = parseDate(d.DATE_CREATED);
     });
+
+    const selectedServiceTypes = new Set(["Flooding"]);
+    const serviceTypeColors = Object.fromEntries(
+      serviceTypeDefinitions.map((item) => [item.key, item.defaultColor]),
+    );
 
     const linkedSelections = {
       neighborhood: new Set(),
@@ -37,6 +95,9 @@ d3.csv("data/subset_data_edited.csv")
 
     // Leaflet Map
     leafletMap = new LeafletMap({ parentElement: "#my-map" }, floodingData);
+    leafletMap.setServiceTypeOverlayData(serviceData);
+    leafletMap.setSelectedServiceTypes(selectedServiceTypes);
+    leafletMap.setServiceTypeColors(serviceTypeColors);
     priorityChart = new PriorityChart(
       { parentElement: "#priority-container" },
       floodingData,
@@ -45,6 +106,7 @@ d3.csv("data/subset_data_edited.csv")
       { parentElement: "#service-container" },
       floodingData,
     );
+    initServiceTypeControls();
 
     d3.select("#stadia-map").on("click", () => {
       leafletMap.changeBasemap("stadia");
@@ -235,6 +297,57 @@ d3.csv("data/subset_data_edited.csv")
       timelineFilter = { dateStart, dateEnd };
       renderLinkedViews();
     });
+
+    function initServiceTypeControls() {
+      const toggleButton = document.getElementById("serviceTypeToggle");
+      const panel = document.getElementById("serviceTypePanel");
+
+      panel.innerHTML = "";
+
+      serviceTypeDefinitions.forEach((definition) => {
+        const option = document.createElement("div");
+        option.className = "service-type-option";
+        option.innerHTML = definition.key === "Flooding"
+          ? `
+            <input type="checkbox" checked disabled>
+            <label>${definition.key}</label>
+            <span></span>
+          `
+          : `
+            <input type="checkbox">
+            <label>${definition.key}</label>
+            <input type="color" value="${serviceTypeColors[definition.key]}">
+          `;
+
+        const checkbox = option.querySelector('input[type="checkbox"]');
+        const colorPicker = option.querySelector('input[type="color"]');
+
+        if (definition.key !== "Flooding") {
+          checkbox.addEventListener("change", () => {
+            if (checkbox.checked) {
+              selectedServiceTypes.add(definition.key);
+            } else {
+              selectedServiceTypes.delete(definition.key);
+            }
+
+            leafletMap.setSelectedServiceTypes(selectedServiceTypes);
+          });
+        }
+
+        if (colorPicker) {
+          colorPicker.addEventListener("input", () => {
+            serviceTypeColors[definition.key] = colorPicker.value;
+            leafletMap.setServiceTypeColors(serviceTypeColors);
+          });
+        }
+
+        panel.appendChild(option);
+      });
+
+      toggleButton.addEventListener("click", () => {
+        panel.classList.toggle("hidden");
+      });
+    }
   })
   .catch((error) => console.error(error));
 
