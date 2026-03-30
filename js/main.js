@@ -160,6 +160,8 @@ d3.csv("data/subset_data_edited.csv")
       filterTimelineByData(fullyFilteredData);
       leafletMap.setFilteredData(fullyFilteredData);
 
+      console.log(fullyFilteredData)
+
       updateNeighborhoodChart(
         filterByLinkedSelections(baseData, "neighborhood"),
         linkedSelections.neighborhood

@@ -319,8 +319,12 @@ class LeafletMap {
   setFilteredData(filteredData) {
     let vis = this;
 
-    vis.Dots
-      .attr("display", vis.heatVisible ? "none" : null)
-      .attr("opacity", 1);
+    vis.Dots.attr("display", (d) => {
+      if (vis.heatVisible) return "none";
+
+      if (vis.brushEnabled) return null;
+
+      return filteredData.includes(d) ? null : "none";
+    });
   }
 }

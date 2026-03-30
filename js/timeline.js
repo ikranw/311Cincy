@@ -149,6 +149,9 @@ function drawTimeline(data) {
   clearBtn.addEventListener("click", () => {
     brushGroup.call(brush.move, null);
     clearBtn.classList.add("hidden");
+    toggleBtn.textContent = "Enable Date Filter";
+    toggleBtn.classList.remove("active");
+    brushEnabled = !brushEnabled
     resetBarHighlight();
     dispatchBrushEvent(null, null);
   });
