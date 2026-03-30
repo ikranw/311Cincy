@@ -62,16 +62,16 @@ d3.csv("data/subset_data_edited.csv")
     });
 
     d3.select("#heatToggle").on("click", () => {
-      leafletMap.toggleHeat()
+      leafletMap.toggleHeat();
 
       let element = document.getElementById("heatToggle");
 
-      if(!leafletMap.heatVisible) {
+      if (!leafletMap.heatVisible) {
         element.classList.remove("button-active");
       } else {
         element.classList.add("button-active");
       }
-    })
+    });
 
     document.addEventListener("mapbrush", (event) => {
       const brushedData = leafletMap.getBrushedItems();
@@ -84,6 +84,13 @@ d3.csv("data/subset_data_edited.csv")
       console.log("Brushed Items: ", brushedData);
 
       filterTimelineByData(brushedData);
+      updateNeighborhoodChart(brushedData);
+      updateMethodChart(brushedData);
+      updateDepartmentChart(brushedData);
+    }
+
+    // UPDATE OTHER VISUALIZATIONS WITH TL BRUSHED DATA
+    function updateGraphsFromTimeline(brushedData) {
       updateNeighborhoodChart(brushedData);
       updateMethodChart(brushedData);
       updateDepartmentChart(brushedData);
@@ -106,6 +113,18 @@ d3.csv("data/subset_data_edited.csv")
         if (d.date === null) return "none";
         return d.date >= dateStart && d.date <= dateEnd ? null : "none";
       });
+
+      let brushed = [];
+      floodingData.forEach((d) => {
+        if (
+          new Date(d.DATE_CREATED) >= dateStart &&
+          new Date(d.DATE_CREATED) <= dateEnd
+        ) {
+          brushed.push(d);
+        }
+      });
+
+      updateGraphsFromTimeline(brushed);
     });
   })
   .catch((error) => console.error(error));
