@@ -8,6 +8,7 @@ class ServiceTypeChart {
       height: 280
     };
     this.data = _data;
+    this.selectedServiceTypes = new Set();
     this.initVis();
   }
 
@@ -54,20 +55,20 @@ class ServiceTypeChart {
     vis.updateVis();
   }
 
-  updateData(newData) {
+  updateData(newData, selectedServiceTypes = new Set()) {
     this.data = newData;
+    this.selectedServiceTypes = new Set(selectedServiceTypes);
     this.updateVis();
   }
 
   updateVis() {
     const vis = this;
-    console.log(vis.data)
     if (!vis.container) return
 
     vis.chartData = d3.rollups(
-      vis.data.filter((d) => d.SR_TYPE_DESC && d.SR_TYPE_DESC.trim() !== ""),
+      vis.data.filter((d) => d.serviceTypeLabel && d.serviceTypeLabel.trim() !== ""),
       (values) => values.length,
-      (d) => d.SR_TYPE_DESC.trim()
+      (d) => d.serviceTypeLabel.trim()
     )
       .map(([serviceType, count]) => ({ serviceType, count }))
       .sort((a, b) => d3.descending(a.count, b.count));
@@ -114,18 +115,36 @@ class ServiceTypeChart {
       .attr("y", (d) => vis.yScale(d.serviceType))
       .attr("width", (d) => vis.xScale(d.count))
       .attr("height", vis.yScale.bandwidth())
-      .attr("fill", "#59a14f")
+      .attr("fill", (d) =>
+        vis.selectedServiceTypes.size === 0 || vis.selectedServiceTypes.has(d.serviceType)
+          ? "#59a14f"
+          : "#dcebd9"
+      )
+      .attr("opacity", (d) =>
+        vis.selectedServiceTypes.size === 0 || vis.selectedServiceTypes.has(d.serviceType)
+          ? 1
+          : 0.45
+      )
       .on("mouseover", function (event, d) {
         d3.select(this).attr("fill", "#27632a");
         vis.tooltip
-          .style("display", "block")
+          .style("opacity", 1)
           .html(`<strong>Service Type:</strong> ${d.serviceType}<br><strong>Requests:</strong> ${d.count}`)
           .style("left", event.pageX + 10 + "px")
           .style("top", event.pageY - 28 + "px");
       })
+      .on("mousemove", (event) => {
+        vis.tooltip
+          .style("left", event.pageX + 10 + "px")
+          .style("top", event.pageY - 28 + "px");
+      })
       .on("mouseout", function () {
-        d3.select(this).attr("fill", "#59a14f");
-        vis.tooltip.style("display", "none");
+        d3.select(this).attr("fill", (d) =>
+          vis.selectedServiceTypes.size === 0 || vis.selectedServiceTypes.has(d.serviceType)
+            ? "#59a14f"
+            : "#dcebd9"
+        );
+        vis.tooltip.style("opacity", 0);
       })
       .on("click", (event, d) => {
         document.dispatchEvent(
@@ -144,6 +163,11 @@ class ServiceTypeChart {
       .attr("x", (d) => vis.xScale(d.count) + 6)
       .attr("y", (d) => vis.yScale(d.serviceType) + vis.yScale.bandwidth() / 2 + 4)
       .attr("fill", "#333")
+      .attr("opacity", (d) =>
+        vis.selectedServiceTypes.size === 0 || vis.selectedServiceTypes.has(d.serviceType)
+          ? 1
+          : 0.45
+      )
       .text((d) => d.count);
   }
 }

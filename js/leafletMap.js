@@ -7,6 +7,7 @@ class LeafletMap {
     this.serviceOverlayData = [];
     this.selectedServiceTypes = new Set(["Flooding"]);
     this.serviceTypeColors = {};
+    this.filteredDataSet = null;
     this.initVis();
     this.mapChoice = "neighborhood";
     this.brushEnabled = false;
@@ -272,10 +273,12 @@ class LeafletMap {
 
   updateServiceDots() {
     let vis = this;
+    const ignoreFilteredSet = vis.brushEnabled && vis.hasActiveBrush;
 
     const visibleServiceData = vis.serviceOverlayData.filter((d) =>
       d.serviceTypeLabel !== "Flooding" &&
-      vis.selectedServiceTypes.has(d.serviceTypeLabel)
+      vis.selectedServiceTypes.has(d.serviceTypeLabel) &&
+      (ignoreFilteredSet || vis.filteredDataSet === null || vis.filteredDataSet.has(d))
     );
 
     vis.serviceDots
@@ -350,14 +353,15 @@ class LeafletMap {
     vis.base_layer.addTo(vis.theMap);
   }
 
-  getBrushedItems() {
+  getBrushedItems(data = null) {
     let vis = this;
+    const sourceData = data || vis.data;
 
     const cx = parseFloat(vis.brushCircle.attr("cx"));
     const cy = parseFloat(vis.brushCircle.attr("cy"));
     const r = parseFloat(vis.brushCircle.attr("r"));
 
-    return vis.data.filter((d) => {
+    return sourceData.filter((d) => {
       const p = vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]);
       const dx = p.x - cx;
       const dy = p.y - cy;
@@ -418,6 +422,7 @@ class LeafletMap {
 
   setFilteredData(filteredData) {
     let vis = this;
+    vis.filteredDataSet = new Set(filteredData);
 
     vis.Dots.attr("display", (d) => {
       if (vis.heatVisible) return "none";
@@ -426,6 +431,8 @@ class LeafletMap {
 
       return filteredData.includes(d) ? null : "none";
     });
+
+    vis.updateServiceDots();
   }
 
   addLegend() {
