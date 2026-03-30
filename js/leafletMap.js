@@ -315,6 +315,9 @@ class LeafletMap {
   setFilteredData(filteredData) {
     let vis = this;
 
-    vis.Dots.attr("display", (d) => (filteredData.includes(d) ? null : "none"));
+    vis.Dots.attr("display", (d) => {
+      if (vis.heatVisible) return "none";
+      return filteredData.includes(d) ? null : "none";
+    });
   }
 }

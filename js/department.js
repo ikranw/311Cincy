@@ -8,6 +8,7 @@ class DepartmentChart {
       height: 280
     };
     this.data = _data;
+    this.selectedDepartments = new Set();
     this.initVis();
   }
 
@@ -62,8 +63,9 @@ class DepartmentChart {
     vis.updateVis();
   }
 
-  updateData(newData) {
+  updateData(newData, selectedDepartments = new Set()) {
     this.data = newData;
+    this.selectedDepartments = new Set(selectedDepartments);
     this.updateVis();
   }
 
@@ -126,8 +128,19 @@ class DepartmentChart {
       .attr("x2", (d) => vis.xScale(d.count))
       .attr("y1", (d) => vis.yScale(d.department) + vis.yScale.bandwidth() / 2)
       .attr("y2", (d) => vis.yScale(d.department) + vis.yScale.bandwidth() / 2)
-      .attr("stroke", "#a8c4e0")
-      .attr("stroke-width", 3);
+      .attr("stroke", (d) =>
+        vis.selectedDepartments.size === 0 || vis.selectedDepartments.has(d.department)
+          ? "#a8c4e0"
+          : "#d9e2ec"
+      )
+      .attr("stroke-width", 3)
+      .on("click", (event, d) => {
+        document.dispatchEvent(
+          new CustomEvent("chartselectionchange", {
+            detail: { chart: "department", value: d.department },
+          })
+        );
+      });
 
     vis.chart.selectAll(".department-dot")
       .data(vis.chartData, (d) => d.department)
@@ -136,7 +149,11 @@ class DepartmentChart {
       .attr("cx", (d) => vis.xScale(d.count))
       .attr("cy", (d) => vis.yScale(d.department) + vis.yScale.bandwidth() / 2)
       .attr("r", 7)
-      .attr("fill", "#3a6ea8")
+      .attr("fill", (d) =>
+        vis.selectedDepartments.size === 0 || vis.selectedDepartments.has(d.department)
+          ? "#3a6ea8"
+          : "#cfd8e3"
+      )
       .on("mouseover", (event, d) => {
         vis.tooltip
           .style("opacity", 1)
@@ -149,6 +166,13 @@ class DepartmentChart {
       })
       .on("mouseleave", () => {
         vis.tooltip.style("opacity", 0);
+      })
+      .on("click", (event, d) => {
+        document.dispatchEvent(
+          new CustomEvent("chartselectionchange", {
+            detail: { chart: "department", value: d.department },
+          })
+        );
       });
 
     vis.chart.selectAll(".department-value")
@@ -160,23 +184,29 @@ class DepartmentChart {
       .attr("dy", "0.35em")
       .attr("fill", "#333")
       .attr("font-size", 11)
+      .attr("opacity", (d) =>
+        vis.selectedDepartments.size === 0 || vis.selectedDepartments.has(d.department)
+          ? 1
+          : 0.45
+      )
       .text((d) => d.count);
   }
 }
 
-function initDepartmentChart(data) {
+function initDepartmentChart(data, selectedDepartments = new Set()) {
   d3.select("#department-container").selectAll("*").remove();
   departmentChart = new DepartmentChart(
     { parentElement: "#department-container" },
     data
   );
+  departmentChart.updateData(data, selectedDepartments);
 }
 
-function updateDepartmentChart(data) {
+function updateDepartmentChart(data, selectedDepartments = new Set()) {
   if (!departmentChart) {
-    initDepartmentChart(data);
+    initDepartmentChart(data, selectedDepartments);
     return;
   }
 
-  departmentChart.updateData(data);
+  departmentChart.updateData(data, selectedDepartments);
 }

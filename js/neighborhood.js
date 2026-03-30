@@ -8,6 +8,7 @@ class NeighborhoodChart {
       height: 300
     };
     this.data = _data;
+    this.selectedNeighborhoods = new Set();
     this.initVis();
   }
 
@@ -62,8 +63,9 @@ class NeighborhoodChart {
     vis.updateVis();
   }
 
-  updateData(newData) {
+  updateData(newData, selectedNeighborhoods = new Set()) {
     this.data = newData;
+    this.selectedNeighborhoods = new Set(selectedNeighborhoods);
     this.updateVis();
   }
 
@@ -111,6 +113,16 @@ class NeighborhoodChart {
       .attr("y", (d) => vis.yScale(d.name))
       .attr("width", (d) => vis.xScale(d.count))
       .attr("height", vis.yScale.bandwidth())
+      .attr("fill", (d) =>
+        vis.selectedNeighborhoods.size === 0 || vis.selectedNeighborhoods.has(d.name)
+          ? "#6b93c4"
+          : "#e6edf5"
+      )
+      .attr("opacity", (d) =>
+        vis.selectedNeighborhoods.size === 0 || vis.selectedNeighborhoods.has(d.name)
+          ? 1
+          : 0.5
+      )
       .on("mouseover", (event, d) => {
         vis.tooltip
           .style("opacity", 1)
@@ -123,6 +135,13 @@ class NeighborhoodChart {
       })
       .on("mouseleave", () => {
         vis.tooltip.style("opacity", 0);
+      })
+      .on("click", (event, d) => {
+        document.dispatchEvent(
+          new CustomEvent("chartselectionchange", {
+            detail: { chart: "neighborhood", value: d.name },
+          })
+        );
       });
 
     vis.chart.selectAll(".neighborhood-value")
@@ -136,19 +155,20 @@ class NeighborhoodChart {
   }
 }
 
-function initNeighborhoodChart(data) {
+function initNeighborhoodChart(data, selectedNeighborhoods = new Set()) {
   d3.select("#neighborhood-container").selectAll("*").remove();
   neighborhoodChart = new NeighborhoodChart(
     { parentElement: "#neighborhood-container" },
     data
   );
+  neighborhoodChart.updateData(data, selectedNeighborhoods);
 }
 
-function updateNeighborhoodChart(data) {
+function updateNeighborhoodChart(data, selectedNeighborhoods = new Set()) {
   if (!neighborhoodChart) {
-    initNeighborhoodChart(data);
+    initNeighborhoodChart(data, selectedNeighborhoods);
     return;
   }
 
-  neighborhoodChart.updateData(data);
+  neighborhoodChart.updateData(data, selectedNeighborhoods);
 }

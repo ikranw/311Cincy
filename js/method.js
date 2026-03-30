@@ -9,6 +9,7 @@ class MethodChart {
       height: 240
     };
     this.data = _data;
+    this.selectedMethods = new Set();
     this.initVis();
   }
 
@@ -39,8 +40,9 @@ class MethodChart {
     vis.updateVis();
   }
 
-  updateData(newData) {
+  updateData(newData, selectedMethods = new Set()) {
     this.data = newData;
+    this.selectedMethods = new Set(selectedMethods);
     this.updateVis();
   }
 
@@ -82,6 +84,11 @@ class MethodChart {
       .attr("fill", (d) => vis.colorScale(d.data.method))
       .attr("stroke", "#fff")
       .attr("stroke-width", 2)
+      .attr("opacity", (d) =>
+        vis.selectedMethods.size === 0 || vis.selectedMethods.has(d.data.method)
+          ? 1
+          : 0.35
+      )
       .on("mouseover", (event, d) => {
         vis.tooltip
           .style("opacity", 1)
@@ -96,6 +103,13 @@ class MethodChart {
       })
       .on("mouseleave", () => {
         vis.tooltip.style("opacity", 0);
+      })
+      .on("click", (event, d) => {
+        document.dispatchEvent(
+          new CustomEvent("chartselectionchange", {
+            detail: { chart: "method", value: d.data.method },
+          })
+        );
       });
 
     vis.chart.selectAll(".method-line")
@@ -105,6 +119,11 @@ class MethodChart {
       .attr("fill", "none")
       .attr("stroke", "#999")
       .attr("stroke-width", 1.25)
+      .attr("opacity", (d) =>
+        vis.selectedMethods.size === 0 || vis.selectedMethods.has(d.data.method)
+          ? 1
+          : 0.35
+      )
       .attr("points", (d) => {
         const arcPoint = vis.arc.centroid(d);
         const outerPoint = vis.outerArc.centroid(d);
@@ -132,23 +151,29 @@ class MethodChart {
       .attr("fill", "#555")
       .attr("font-size", 10)
       .attr("font-weight", 500)
+      .attr("opacity", (d) =>
+        vis.selectedMethods.size === 0 || vis.selectedMethods.has(d.data.method)
+          ? 1
+          : 0.45
+      )
       .text((d) => d.data.method);
   }
 }
 
-function initMethodChart(data) {
+function initMethodChart(data, selectedMethods = new Set()) {
   d3.select("#method-container").selectAll("*").remove();
   methodChart = new MethodChart(
     { parentElement: "#method-container" },
     data
   );
+  methodChart.updateData(data, selectedMethods);
 }
 
-function updateMethodChart(data) {
+function updateMethodChart(data, selectedMethods = new Set()) {
   if (!methodChart) {
-    initMethodChart(data);
+    initMethodChart(data, selectedMethods);
     return;
   }
 
-  methodChart.updateData(data);
+  methodChart.updateData(data, selectedMethods);
 }

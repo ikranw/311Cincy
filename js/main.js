@@ -14,6 +14,19 @@ d3.csv("data/subset_data_edited.csv")
 
       d.daysToComplete = getDays(d.DATE_CREATED, d.DATE_CLOSED);
     });
+
+    const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
+    floodingData.forEach((d) => {
+      d.date = parseDate(d.DATE_CREATED);
+    });
+
+    const linkedSelections = {
+      neighborhood: new Set(),
+      method: new Set(),
+      department: new Set(),
+    };
+    let timelineFilter = { dateStart: null, dateEnd: null };
+
     console.log(floodingData);
 
     // Leaflet Map
@@ -52,12 +65,10 @@ d3.csv("data/subset_data_edited.csv")
         container.innerHTML = "";
 
         initTimeline(floodingData);
-        initNeighborhoodChart(floodingData);
-        initMethodChart(floodingData);
-        initDepartmentChart(floodingData);
+        renderLinkedViews();
       } else {
         element.classList.add("button-active");
-        updateGraphs(leafletMap.getBrushedItems());
+        renderLinkedViews();
       }
     });
 
@@ -73,39 +84,109 @@ d3.csv("data/subset_data_edited.csv")
       }
     })
 
-    document.addEventListener("mapbrush", (event) => {
-      const brushedData = leafletMap.getBrushedItems();
-
-      updateGraphs(brushedData);
+    document.addEventListener("mapbrush", () => {
+      renderLinkedViews();
     });
 
-    // UPDATE OTHER VISUALIZATIONS WITH GRAPH BRUSHED DATA
-    function updateGraphs(brushedData) {
-      console.log("Brushed Items: ", brushedData);
+    document.addEventListener("chartselectionchange", (event) => {
+      const { chart, value } = event.detail;
 
-      filterTimelineByData(brushedData);
-      updateNeighborhoodChart(brushedData);
-      updateMethodChart(brushedData);
-      updateDepartmentChart(brushedData);
+      if (!linkedSelections[chart]) return;
+
+      if (linkedSelections[chart].has(value)) {
+        linkedSelections[chart].delete(value);
+      } else {
+        linkedSelections[chart].add(value);
+      }
+
+      renderLinkedViews();
+    });
+
+    function getMapFilteredData() {
+      if (leafletMap.brushEnabled) {
+        return leafletMap.getBrushedItems();
+      }
+
+      return floodingData;
+    }
+
+    function filterByTimelineSelection(data) {
+      if (timelineFilter.dateStart === null || timelineFilter.dateEnd === null) {
+        return data;
+      }
+
+      return data.filter((d) => {
+        if (d.date === null) return false;
+        return d.date >= timelineFilter.dateStart && d.date <= timelineFilter.dateEnd;
+      });
+    }
+
+    function filterByLinkedSelections(data, excludedChart = null) {
+      return data.filter((d) => {
+        if (
+          excludedChart !== "neighborhood" &&
+          linkedSelections.neighborhood.size > 0 &&
+          !linkedSelections.neighborhood.has(d.NEIGHBORHOOD)
+        ) {
+          return false;
+        }
+
+        if (
+          excludedChart !== "method" &&
+          linkedSelections.method.size > 0 &&
+          !linkedSelections.method.has(d.METHOD_RECEIVED)
+        ) {
+          return false;
+        }
+
+        if (
+          excludedChart !== "department" &&
+          linkedSelections.department.size > 0 &&
+          !linkedSelections.department.has(d.DEPT_NAME)
+        ) {
+          return false;
+        }
+
+        return true;
+      });
+    }
+
+    // UPDATE OTHER VISUALIZATIONS WITH LINKED MAP, TIMELINE, AND CHART FILTERED DATA
+    function renderLinkedViews() {
+      const mapFilteredData = getMapFilteredData();
+      const baseData = filterByTimelineSelection(mapFilteredData);
+      const fullyFilteredData = filterByLinkedSelections(baseData);
+
+      filterTimelineByData(fullyFilteredData);
+      leafletMap.setFilteredData(fullyFilteredData);
+
+      updateNeighborhoodChart(
+        filterByLinkedSelections(baseData, "neighborhood"),
+        linkedSelections.neighborhood
+      );
+      updateMethodChart(
+        filterByLinkedSelections(baseData, "method"),
+        linkedSelections.method
+      );
+      updateDepartmentChart(
+        filterByLinkedSelections(baseData, "department"),
+        linkedSelections.department
+      );
+
+      // add charts to be linked/brushed
+      // updateFutureChart(filterByLinkedSelections(baseData, "futureChartKey"), linkedSelections.futureChartKey);
     }
 
     initTimeline(floodingData);
-    initNeighborhoodChart(floodingData);
-    initMethodChart(floodingData);
-    initDepartmentChart(floodingData);
-
-    const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
-    floodingData.forEach((d) => {
-      d.date = parseDate(d.DATE_CREATED);
-    });
+    initNeighborhoodChart(floodingData, linkedSelections.neighborhood);
+    initMethodChart(floodingData, linkedSelections.method);
+    initDepartmentChart(floodingData, linkedSelections.department);
+    renderLinkedViews();
 
     document.addEventListener("timelinebrush", (event) => {
       const { dateStart, dateEnd } = event.detail;
-      leafletMap.Dots.attr("display", (d) => {
-        if (dateStart === null) return null;
-        if (d.date === null) return "none";
-        return d.date >= dateStart && d.date <= dateEnd ? null : "none";
-      });
+      timelineFilter = { dateStart, dateEnd };
+      renderLinkedViews();
     });
   })
   .catch((error) => console.error(error));
