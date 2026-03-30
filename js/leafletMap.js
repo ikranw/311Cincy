@@ -214,7 +214,7 @@ class LeafletMap {
     } else if (vis.mapChoice == "daysToComplete") {
       vis.colorPalette = d3
         .scaleOrdinal()
-        .domain([5, 10])
+        .domain([0, 5, 10])
         .range(["#1f77b4", "#ff7f0e", "#2ca02c"]);
 
       vis.colorAccessor = (d) => vis.colorPalette(d.daysToComplete);
