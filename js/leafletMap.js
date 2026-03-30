@@ -85,7 +85,7 @@ class LeafletMap {
           // Format number with million and thousand separator
           //***** TO DO- change this tooltip to show useful information about the quakes
           .html(
-            `<div class="tooltip-label"><p>Neighborhood: ${d.NEIGHBORHOOD}</p><p>Date Created: ${d3.utcFormat("%B %d, %Y")(new Date(d.DATE_CREATED))}</p><p>Priority: ${d.PRIORITY == "" ? "Not Specified" : d.PRIORITY}</p><p>Responding Department: ${d.DEPT_NAME}</p></div>`,
+            `<div class="tooltip-label"><p>Neighborhood: ${d.NEIGHBORHOOD}</p><p>Date Created: ${d3.utcFormat("%B %d, %Y")(new Date(d.DATE_CREATED))}</p><p>Date Closed: ${d3.utcFormat("%B %d, %Y")(new Date(d.DATE_CLOSED))}</p><p>Priority: ${d.PRIORITY == "" ? "Not Specified" : d.PRIORITY}</p><p>Responding Department: ${d.DEPT_NAME}</p></div>`,
           );
       })
       .on("mousemove", (event) => {
