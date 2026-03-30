@@ -103,7 +103,7 @@ d3.csv("data/subset_data_edited.csv")
     });
 
     function getMapFilteredData() {
-      if (leafletMap.brushEnabled) {
+      if (leafletMap.brushEnabled && leafletMap.hasActiveBrush) {
         return leafletMap.getBrushedItems();
       }
 

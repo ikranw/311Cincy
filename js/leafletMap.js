@@ -7,6 +7,7 @@ class LeafletMap {
     this.initVis();
     this.mapChoice = "neighborhood";
     this.brushEnabled = false;
+    this.hasActiveBrush = false;
     this.heatVisible = false;
   }
 
@@ -130,6 +131,7 @@ class LeafletMap {
 
           .on("drag", (event) => {
             if (!vis.brushEnabled) return;
+            vis.hasActiveBrush = true;
             vis.brushCircle.attr("cx", event.x).attr("cy", event.y);
             vis.updateBrushedItems(false);
           })
@@ -296,7 +298,9 @@ class LeafletMap {
     let vis = this;
 
     vis.brushEnabled = !vis.brushEnabled;
+    vis.hasActiveBrush = false;
     vis.brushCircle.style("display", vis.brushEnabled ? "block" : "none");
+    vis.Dots.classed("selected", false);
   }
 
   toggleHeat() {
@@ -315,9 +319,8 @@ class LeafletMap {
   setFilteredData(filteredData) {
     let vis = this;
 
-    vis.Dots.attr("display", (d) => {
-      if (vis.heatVisible) return "none";
-      return filteredData.includes(d) ? null : "none";
-    });
+    vis.Dots
+      .attr("display", vis.heatVisible ? "none" : null)
+      .attr("opacity", 1);
   }
 }
