@@ -69,12 +69,6 @@ function drawTimeline(data) {
     .attr("text-anchor", "middle")
     .text("# of Requests");
 
-  svg.append("text")
-    .attr("class", "chart-title")
-    .attr("x", innerWidth / 2)
-    .attr("y", -14)
-    .attr("text-anchor", "middle")
-    .text("Flooding-Related 311 Requests by Week — Cincinnati, 2025");
 
   const barWidth = xScale(d3.timeWeek.offset(bins[0].week, 1)) - xScale(bins[0].week) - 1;
 

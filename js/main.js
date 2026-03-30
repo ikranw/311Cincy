@@ -192,6 +192,11 @@ d3.csv("data/subset_data_edited.csv")
       filterTimelineByData(fullyFilteredData);
       leafletMap.setFilteredData(fullyFilteredData);
 
+      const badge = document.getElementById("count-badge");
+      if (badge) {
+        badge.textContent = `Showing ${fullyFilteredData.length} of ${floodingData.length} flooding requests.`;
+      }
+
       console.log(fullyFilteredData);
 
       updateNeighborhoodChart(

@@ -14,6 +14,14 @@ header {
 }
 header h1 { font-size: 18px; font-weight: 600; }
 
+.count-badge {
+  padding: 6px 16px 0;
+  font-size: 13px;
+  font-weight: 500;
+  color: #555;
+  text-align: right;
+}
+
 .dashboard {
   display: flex;
   flex-direction: column;
