@@ -32,6 +32,37 @@ d3.csv("data/subset_data_edited.csv")
       priority: new Set(),
     };
     let timelineFilter = { dateStart: null, dateEnd: null };
+    let monthFilter = null;
+
+    // Populate month dropdown from data
+    const monthFmt = d3.timeFormat("%B");
+    const uniqueMonths = Array.from(
+      new Set(
+        floodingData
+          .filter(d => d.date !== null)
+          .map(d => d3.timeMonth.floor(d.date).getTime())
+      )
+    ).sort();
+    const monthSelect = document.getElementById("month-filter");
+    uniqueMonths.forEach(ts => {
+      const opt = document.createElement("option");
+      opt.value = ts;
+      opt.textContent = monthFmt(new Date(ts));
+      monthSelect.appendChild(opt);
+    });
+    monthSelect.addEventListener("change", () => {
+      const val = monthSelect.value;
+      monthFilter = val ? new Date(+val) : null;
+      renderLinkedViews();
+    });
+
+    function filterByMonth(data) {
+      if (monthFilter === null) return data;
+      return data.filter(d => {
+        if (!d.date) return false;
+        return d3.timeMonth.floor(d.date).getTime() === monthFilter.getTime();
+      });
+    }
 
     console.log(floodingData);
 
@@ -186,7 +217,8 @@ d3.csv("data/subset_data_edited.csv")
     // UPDATE OTHER VISUALIZATIONS WITH LINKED MAP, TIMELINE, AND CHART FILTERED DATA
     function renderLinkedViews() {
       const mapFilteredData = getMapFilteredData();
-      const baseData = filterByTimelineSelection(mapFilteredData);
+      const timeFiltered = filterByTimelineSelection(mapFilteredData);
+      const baseData = filterByMonth(timeFiltered);
       const fullyFilteredData = filterByLinkedSelections(baseData);
 
       filterTimelineByData(fullyFilteredData);
