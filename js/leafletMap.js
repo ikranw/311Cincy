@@ -215,7 +215,7 @@ class LeafletMap {
       vis.colorPalette = d3
         .scaleOrdinal()
         .domain([5, 10])
-        .range(["green", "orange", "red"]);
+        .range(["#1f77b4", "#ff7f0e", "#2ca02c"]);
 
       vis.colorAccessor = (d) => vis.colorPalette(d.daysToComplete);
     }
@@ -231,6 +231,8 @@ class LeafletMap {
       )
       .attr("fill", vis.colorAccessor)
       .attr("r", 8);
+
+    vis.addLegend();
   }
 
   changeBasemap(type) {
@@ -326,5 +328,57 @@ class LeafletMap {
 
       return filteredData.includes(d) ? null : "none";
     });
+  }
+
+  addLegend() {
+    let vis = this;
+
+    if (vis.legend) {
+      vis.theMap.removeControl(vis.legend);
+    }
+
+    if (vis.mapChoice === "neighborhood") {
+      return;
+    }
+
+    vis.legend = L.control({ position: "bottomleft" });
+
+    vis.legend.onAdd = function (map) {
+      const div = L.DomUtil.create("div", "info legend");
+      div.style.background = "white";
+      div.style.padding = "6px";
+      div.style.borderRadius = "4px";
+      div.style.boxShadow = "0 0 15px rgba(0,0,0,0.2)";
+      div.style.fontSize = "12px";
+
+      let labels = [];
+
+      if (vis.mapChoice === "daysToComplete") {
+        const ranges = [
+          { label: "0-5 days", color: "#1f77b4" },
+          { label: "6-10 days", color: "#ff7f0e" },
+          { label: "11+ days", color: "#2ca02c" },
+        ];
+
+        ranges.forEach((r) => {
+          labels.push(
+            `<i style="background:${r.color}; width:12px; height:12px; display:inline-block; margin-right:5px;"></i> ${r.label}`,
+          );
+        });
+      } else {
+        const categories = vis.colorPalette.domain();
+        categories.forEach((cat) => {
+          const color = vis.colorPalette(cat);
+          labels.push(
+            `<i style="background:${color}; width:12px; height:12px; display:inline-block; margin-right:5px;"></i> ${cat}`,
+          );
+        });
+      }
+
+      div.innerHTML = labels.join("<br>");
+      return div;
+    };
+
+    vis.legend.addTo(vis.theMap);
   }
 }

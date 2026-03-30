@@ -13,6 +13,10 @@ d3.csv("data/subset_data_edited.csv")
       d.longitude = +d.LONGITUDE;
 
       d.daysToComplete = getDays(d.DATE_CREATED, d.DATE_CLOSED);
+
+      if(d.PRIORITY === "") {
+        d.PRIORITY = "Not Specified"
+      }
     });
 
     const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
