@@ -4,6 +4,9 @@ class LeafletMap {
       parentElement: _config.parentElement,
     };
     this.data = _data;
+    this.serviceOverlayData = [];
+    this.selectedServiceTypes = new Set(["Flooding"]);
+    this.serviceTypeColors = {};
     this.initVis();
     this.mapChoice = "neighborhood";
     this.brushEnabled = false;
@@ -115,6 +118,8 @@ class LeafletMap {
 
         d3.select("#tooltip").style("opacity", 0); //turn off the tooltip
       });
+
+    vis.serviceDots = vis.svg.append("g").attr("class", "service-dot-layer");
 
     vis.brushRadius = 75;
     vis.brushEnabled = true;
@@ -242,7 +247,88 @@ class LeafletMap {
       .attr("fill", vis.colorAccessor)
       .attr("r", 8);
 
+    vis.updateServiceDots();
+
     vis.addLegend();
+  }
+
+  setServiceTypeOverlayData(serviceOverlayData) {
+    let vis = this;
+    vis.serviceOverlayData = serviceOverlayData;
+    vis.updateServiceDots();
+  }
+
+  setSelectedServiceTypes(selectedServiceTypes) {
+    let vis = this;
+    vis.selectedServiceTypes = new Set(selectedServiceTypes);
+    vis.updateServiceDots();
+  }
+
+  setServiceTypeColors(serviceTypeColors) {
+    let vis = this;
+    vis.serviceTypeColors = { ...serviceTypeColors };
+    vis.updateServiceDots();
+  }
+
+  updateServiceDots() {
+    let vis = this;
+
+    const visibleServiceData = vis.serviceOverlayData.filter((d) =>
+      d.serviceTypeLabel !== "Flooding" &&
+      vis.selectedServiceTypes.has(d.serviceTypeLabel)
+    );
+
+    vis.serviceDots
+      .selectAll(".service-dot")
+      .data(visibleServiceData, (d) => `${d.serviceTypeLabel}-${d.SR_ID || d.DATE_CREATED}-${d.latitude}-${d.longitude}`)
+      .join(
+        (enter) =>
+          enter
+            .append("circle")
+            .attr("class", "service-dot")
+            .attr("stroke", "black")
+            .attr("r", 8)
+            .on("mouseover", function (event, d) {
+              d3.select(this)
+                .transition()
+                .duration("150")
+                .attr("fill", d3.color(vis.serviceTypeColors[d.serviceTypeLabel] || "#666").brighter(0.8))
+                .attr("r", 10);
+
+              d3.select("#tooltip")
+                .style("opacity", 1)
+                .style("z-index", 1000000)
+                .html(
+                  `<div class="tooltip-label"><p>Service Type: ${d.serviceTypeLabel}</p><p>Neighborhood: ${d.NEIGHBORHOOD}</p><p>Date Created: ${d3.utcFormat("%B %d, %Y")(new Date(d.DATE_CREATED))}</p><p>Priority: ${d.PRIORITY == "" ? "Not Specified" : d.PRIORITY}</p><p>Responding Department: ${d.DEPT_NAME}</p></div>`,
+                );
+            })
+            .on("mousemove", (event) => {
+              d3.select("#tooltip")
+                .style("left", event.pageX + 10 + "px")
+                .style("top", event.pageY + 10 + "px");
+            })
+            .on("mouseleave", function (event, d) {
+              d3.select(this)
+                .transition()
+                .duration("150")
+                .attr("fill", vis.serviceTypeColors[d.serviceTypeLabel] || "#666")
+                .attr("r", 8);
+
+              d3.select("#tooltip").style("opacity", 0);
+            }),
+        (update) => update,
+        (exit) => exit.remove(),
+      )
+      .attr(
+        "cx",
+        (d) => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).x,
+      )
+      .attr(
+        "cy",
+        (d) => vis.theMap.latLngToLayerPoint([d.latitude, d.longitude]).y,
+      )
+      .attr("fill", (d) => vis.serviceTypeColors[d.serviceTypeLabel] || "#666")
+      .attr("display", vis.heatVisible ? "none" : null);
   }
 
   changeBasemap(type) {
@@ -322,9 +408,11 @@ class LeafletMap {
     if (vis.heatVisible) {
       vis.heatLayer.addTo(vis.theMap);
       vis.Dots.attr("display", "none");
+      vis.serviceDots.selectAll(".service-dot").attr("display", "none");
     } else {
       vis.heatLayer.remove();
       vis.Dots.attr("display", null);
+      vis.updateServiceDots();
     }
   }
 
