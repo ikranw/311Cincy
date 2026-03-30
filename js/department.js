@@ -48,7 +48,7 @@ class DepartmentChart {
       .attr("x", vis.innerWidth / 2)
       .attr("y", vis.innerHeight + 32)
       .attr("text-anchor", "middle")
-      .text("Number of Requests");
+      .text("# of Requests");
 
     vis.yAxisLabel = vis.chart.append("text")
       .attr("class", "axis-label")
