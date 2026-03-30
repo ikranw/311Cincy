@@ -35,6 +35,8 @@ d3.csv("data/subset_data_edited.csv")
 
     // Leaflet Map
     leafletMap = new LeafletMap({ parentElement: "#my-map" }, floodingData);
+    priorityChart = new PriorityChart({ parentElement: "#priority-container" }, floodingData);
+    serviceTypeChart = new ServiceTypeChart({ parentElement: "#service-container" }, floodingData);
 
     d3.select("#stadia-map").on("click", () => {
       leafletMap.changeBasemap("stadia");
@@ -178,6 +180,14 @@ d3.csv("data/subset_data_edited.csv")
         filterByLinkedSelections(baseData, "department"),
         linkedSelections.department
       );
+
+        if (priorityChart) {
+    priorityChart.updateData(fullyFilteredData);
+  }
+
+  if (serviceTypeChart) {
+    serviceTypeChart.updateData(fullyFilteredData);
+  }
 
       // add charts to be linked/brushed
       // updateFutureChart(filterByLinkedSelections(baseData, "futureChartKey"), linkedSelections.futureChartKey);
