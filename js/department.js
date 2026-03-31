@@ -4,7 +4,8 @@ class DepartmentChart {
   constructor(_config, _data) {
     this.config = {
       parentElement: _config.parentElement,
-      margin: { top: 10, right: 16, bottom: 32, left: 146 },
+      margin: { top: 10, right: 72, bottom: 32, left: 146 },
+      width: 400,
       height: 210
     };
     this.data = _data;
@@ -18,7 +19,7 @@ class DepartmentChart {
 
     if (!vis.container) return;
 
-    vis.width = vis.container.clientWidth || 500;
+    vis.width = Math.max(vis.container.clientWidth || 0, vis.config.width);
     vis.height = vis.config.height;
     vis.innerWidth =
       vis.width - vis.config.margin.left - vis.config.margin.right;

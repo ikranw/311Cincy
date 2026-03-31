@@ -93,6 +93,17 @@ header h1 { font-size: 18px; font-weight: 600; }
   min-height: 150px;
 }
 
+#method-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#department-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+
 .service-type-controls {
   display: flex;
   align-items: center;

@@ -5,12 +5,18 @@ class MethodChart {
     this.config = {
       parentElement: _config.parentElement,
       margin: { top: 12, right: 12, bottom: 12, left: 12 },
-      width: 360,
+      width: 560,
       height: 210
     };
     this.data = _data;
     this.selectedMethods = new Set();
     this.initVis();
+  }
+
+  getDisplayMethodLabel(method) {
+    return method === "CUSTOMER SERVICE RESPONSE"
+      ? "CUSTOMER SERVICE"
+      : method;
   }
 
   initVis() {
@@ -19,7 +25,7 @@ class MethodChart {
 
     if (!vis.container) return;
 
-    vis.width = vis.container.clientWidth || vis.config.width;
+    vis.width = Math.max(vis.container.clientWidth || 0, vis.config.width);
     vis.height = vis.config.height;
     vis.radius = Math.min(vis.width, vis.height) / 2 - 20;
 
@@ -73,11 +79,61 @@ class MethodChart {
       return;
     }
 
+    function toggleMethodSelection(method) {
+      if (vis.selectedMethods.has(method)) {
+        vis.selectedMethods.delete(method);
+      } else {
+        vis.selectedMethods.add(method);
+      }
+
+      vis.updateVis();
+      document.dispatchEvent(
+        new CustomEvent("chartselectionchange", {
+          detail: { chart: "method", value: method },
+        })
+      );
+    }
+
     const pieData = vis.pie(vis.chartData);
     vis.colorScale.domain(vis.chartData.map((d) => d.method));
 
+    const minLabelY = -vis.radius * 0.95;
+    const maxLabelY = vis.radius * 0.95;
+
+    const labelData = pieData.map((d) => {
+      const midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
+      const side = midAngle < Math.PI ? "right" : "left";
+      const outerPoint = vis.outerArc.centroid(d);
+
+      return {
+        ...d,
+        side,
+        labelX: vis.radius * (side === "right" ? 1.45 : -1.45),
+        labelY: outerPoint[1],
+      };
+    });
+
+    function spreadLabelPositions(items) {
+      if (items.length === 0) return;
+
+      items.sort((a, b) => a.labelY - b.labelY);
+
+      if (items.length === 1) {
+        items[0].labelY = Math.max(minLabelY, Math.min(maxLabelY, items[0].labelY));
+        return;
+      }
+
+      const step = (maxLabelY - minLabelY) / (items.length - 1);
+      items.forEach((item, index) => {
+        item.labelY = minLabelY + index * step;
+      });
+    }
+
+    spreadLabelPositions(labelData.filter((d) => d.side === "left"));
+    spreadLabelPositions(labelData.filter((d) => d.side === "right"));
+
     vis.chart.selectAll(".method-slice")
-      .data(pieData, (d) => d.data.method)
+      .data(labelData, (d) => d.data.method)
       .join("path")
       .attr("class", "method-slice")
       .attr("d", vis.arc)
@@ -93,7 +149,7 @@ class MethodChart {
         vis.tooltip
           .style("opacity", 1)
           .html(
-            `${d.data.method}<br><strong>${d.data.count}</strong> requests`
+            `${vis.getDisplayMethodLabel(d.data.method)}<br><strong>${d.data.count}</strong> requests`
           );
       })
       .on("mousemove", (event) => {
@@ -105,15 +161,11 @@ class MethodChart {
         vis.tooltip.style("opacity", 0);
       })
       .on("click", (event, d) => {
-        document.dispatchEvent(
-          new CustomEvent("chartselectionchange", {
-            detail: { chart: "method", value: d.data.method },
-          })
-        );
+        toggleMethodSelection(d.data.method);
       });
 
     vis.chart.selectAll(".method-line")
-      .data(pieData, (d) => d.data.method)
+      .data(labelData, (d) => d.data.method)
       .join("polyline")
       .attr("class", "method-line")
       .attr("fill", "none")
@@ -127,36 +179,35 @@ class MethodChart {
       .attr("points", (d) => {
         const arcPoint = vis.arc.centroid(d);
         const outerPoint = vis.outerArc.centroid(d);
-        const labelPoint = vis.outerArc.centroid(d);
-        const midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-        labelPoint[0] = vis.radius * 1.22 * (midAngle < Math.PI ? 1 : -1);
+        const labelPoint = [
+          d.labelX + (d.side === "right" ? -10 : 10),
+          d.labelY,
+        ];
         return [arcPoint, outerPoint, labelPoint];
       });
 
     vis.chart.selectAll(".method-label")
-      .data(pieData, (d) => d.data.method)
+      .data(labelData, (d) => d.data.method)
       .join("text")
       .attr("class", "method-label")
       .attr("transform", (d) => {
-        const pos = vis.outerArc.centroid(d);
-        const midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-        pos[0] = vis.radius * 1.28 * (midAngle < Math.PI ? 1 : -1);
-        return `translate(${pos})`;
+        return `translate(${d.labelX},${d.labelY})`;
       })
-      .attr("text-anchor", (d) => {
-        const midAngle = d.startAngle + (d.endAngle - d.startAngle) / 2;
-        return midAngle < Math.PI ? "start" : "end";
-      })
+      .attr("text-anchor", (d) => d.side === "right" ? "start" : "end")
       .attr("dy", "0.35em")
       .attr("fill", "#555")
       .attr("font-size", 10)
       .attr("font-weight", 500)
+      .style("cursor", "pointer")
       .attr("opacity", (d) =>
         vis.selectedMethods.size === 0 || vis.selectedMethods.has(d.data.method)
           ? 1
           : 0.45
       )
-      .text((d) => d.data.method);
+      .text((d) => vis.getDisplayMethodLabel(d.data.method))
+      .on("click", (event, d) => {
+        toggleMethodSelection(d.data.method);
+      });
   }
 }
 
