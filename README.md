@@ -7,7 +7,7 @@ Live link: https://ikranw.github.io/311Cincy/
 
 ## Motivation
 
-<!-- write here -->
+Our application gives a holistic view of 311 requesets in Cincinnati. The primary type of request we focused on was Flooding, however the full list offered is: Flooding, Potholes, Slippery Streets, Leaks, Fire Hydrant Repair, Street Lights Repair, and Public Litter. By utilizing the map and timeline views, supported by the categorical views, a viewer can draw conclusions on when, the method of, where, and how many requests are being made in Cincinnati.
 
 ---
 
@@ -80,13 +80,17 @@ If we had more time we would add a time-range slider so you could scrub through 
 
 ## AI and Collaboration
 
-<!-- write here -->
+We used AI minimally as a way to debug our code, and to help us jumpstart features we had never tried to make before. We did not collaborate with any of our peers, however we did discuss during and after class with some others about our progress, and what decisions we made. Particularly, the street view map visual was not working originally for multiple groups, and there was disucssion between students on how to get around the issue.
 
 ---
 
 ## Who Did What
 
-<!-- write here -->
+We took a structured approach on breaking up the workload. We did not want to have too many merge conflicts, so we set up the project in a modular format, where the containers for each visualization were set up first, and then each person was assigned specific ones that they could work on in seperate files. This minimized doing the same work twice, and rarely introduced conflicts. The breakdown of tasks is as follows, however there was additional overlap as people fixed bugs across responsibilities:
+- Kelly: everything map related, initial project set up
+- Fareena: everything timeline related, brushing and filtering
+- Faith: Categorical views (priority and service type charts), concept sketches
+- Ikran: Categorical views (neighborhood, method, and department charts), linking interactions and toggles, hosting of site
 
 ---
 
