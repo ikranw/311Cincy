@@ -93,6 +93,78 @@ header h1 { font-size: 18px; font-weight: 600; }
   min-height: 150px;
 }
 
+#method-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+#department-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+
+.service-type-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+  position: relative;
+}
+
+.service-type-toggle {
+  font-size: 16px;
+  min-width: 240px;
+  padding: 4px 12px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  background: #fff;
+  color: #333;
+  cursor: pointer;
+  text-align: left;
+  box-shadow: none;
+}
+
+.service-type-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 136px;
+  width: 360px;
+  padding: 12px;
+  border: 1px solid #000;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: none;
+  z-index: 2000;
+}
+
+.service-type-option {
+  display: grid;
+  grid-template-columns: 18px 1fr 44px;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.service-type-option:last-child {
+  margin-bottom: 0;
+}
+
+.service-type-option label {
+  font-size: 13px;
+  color: #333;
+}
+
+.service-type-option input[type="color"] {
+  width: 44px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid #d0d5de;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
 .hidden { display: none; }
 
 /* Timeline */

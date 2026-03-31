@@ -118,14 +118,19 @@ class PriorityChart {
       .on("mouseover", function (event, d) {
         d3.select(this).attr("fill", "#2c5282");
         vis.tooltip
-          .style("display", "block")
+          .style("opacity", 1)
           .html(`<strong>Priority:</strong> ${d.priority}<br><strong>Requests:</strong> ${d.count}`)
+          .style("left", event.pageX + 10 + "px")
+          .style("top", event.pageY - 28 + "px");
+      })
+      .on("mousemove", (event) => {
+        vis.tooltip
           .style("left", event.pageX + 10 + "px")
           .style("top", event.pageY - 28 + "px");
       })
       .on("mouseout", function () {
         d3.select(this).attr("fill", "#4e79a7");
-        vis.tooltip.style("display", "none");
+        vis.tooltip.style("opacity", 0);
       })
       .on("click", (event, d) => {
         document.dispatchEvent(
