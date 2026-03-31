@@ -13,7 +13,7 @@ Our application gives a holistic view of 311 requesets in Cincinnati. The primar
 
 ## Data
 
-<!-- write here -->
+The data we used is a subset of the data Cincinnati's 311 non-emergency service requests. Information about the data, including the full dataset, can be found [here](https://data.cincinnati-oh.gov/efficient-service-delivery/Cincinnati-311-Non-Emergency-Service-Requests/gcej-gmiw/about_data). Our group used specifically the data from 2025. Since the dataset is so large, we first preprocessed it using Pandas to create a seperate dataset with only the entities that we would be focusing on for our project.
 
 ---
 
