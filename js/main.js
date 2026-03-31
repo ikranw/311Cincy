@@ -84,6 +84,29 @@ d3.csv("data/subset_data_edited.csv")
     };
     let timelineFilter = { dateStart: null, dateEnd: null };
     let monthFilter = null;
+    let speedFilter = "";
+
+    document.querySelectorAll("#speed-filter .status-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll("#speed-filter .status-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        speedFilter = btn.dataset.speed;
+        renderLinkedViews();
+      });
+    });
+
+    function filterBySpeed(data) {
+      if (speedFilter === "") return data;
+      return data.filter(d => {
+        const days = d.daysToComplete;
+        if (days === null || isNaN(days)) return false;
+        if (speedFilter === "same") return days === 0;
+        if (speedFilter === "1-3")  return days >= 1 && days <= 3;
+        if (speedFilter === "4-7")  return days >= 4 && days <= 7;
+        if (speedFilter === "8+")   return days >= 8;
+        return true;
+      });
+    }
 
     // Populate month dropdown from data
     const monthFmt = d3.timeFormat("%B");
@@ -279,7 +302,8 @@ d3.csv("data/subset_data_edited.csv")
     function renderLinkedViews() {
       const mapFilteredData = getMapFilteredData();
       const timeFiltered = filterByTimelineSelection(mapFilteredData);
-      const baseData = filterByMonth(timeFiltered);
+      const monthFiltered = filterByMonth(timeFiltered);
+      const baseData = filterBySpeed(monthFiltered);
       const fullyFilteredData = filterByLinkedSelections(baseData);
 
       filterTimelineByData(fullyFilteredData);

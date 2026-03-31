@@ -26,27 +26,34 @@
             </div>
           </div>
           <div id="my-map"></div>
-          <div class="panel-title-row">
-            <div>
-              <label style="font-size: 16px" for="map">Choose Option:</label>
-
-              <select class="axis-label" style="font-size: 16px" name="map" id="map">
+          <div class="map-bottom-controls">
+            <div class="map-controls-row">
+              <span class="filter-label">Color by:</span>
+              <select class="axis-label" name="map" id="map">
                 <option value="neighborhood">Neighborhood</option>
                 <option value="priority">Priority</option>
                 <option value="agency">Agency</option>
                 <option value="daysToComplete">Days To Complete</option>
               </select>
-            </div>
-
-            <div>
+              <div class="map-controls-divider"></div>
               <button class="map-button button-active" id="stadia-map">Street View</button>
               <button class="map-button" id="esri-map">Topography</button>
             </div>
-          </div>
-          <div class="service-type-controls">
-            <label style="font-size: 16px" for="serviceTypeToggle">Service Types:</label>
-            <button class="service-type-toggle" id="serviceTypeToggle" type="button">Select Service Types</button>
+            <div class="map-controls-row">
+              <span class="filter-label">Days to close:</span>
+              <div class="status-toggle" id="speed-filter">
+                <button type="button" class="status-btn active" data-speed="">All</button>
+                <button type="button" class="status-btn" data-speed="same">Same day</button>
+                <button type="button" class="status-btn" data-speed="1-3">1–3 days</button>
+                <button type="button" class="status-btn" data-speed="4-7">4–7 days</button>
+                <button type="button" class="status-btn" data-speed="8+">8+ days</button>
+              </div>
+            </div>
+            <div class="map-controls-row service-type-controls">
+            <span class="filter-label">Service types:</span>
+            <button class="service-type-toggle" id="serviceTypeToggle" type="button">Select service types</button>
             <div class="service-type-panel hidden" id="serviceTypePanel"></div>
+            </div>
           </div>
         </section>
 

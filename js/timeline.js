@@ -1,6 +1,6 @@
 const TL = {
   margin: { top: 28, right: 18, bottom: 52, left: 54 },
-  height: 235
+  height: 232
 };
 
 const parseDate = d3.timeParse("%Y %b %d %I:%M:%S %p");
