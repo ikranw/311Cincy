@@ -25,7 +25,7 @@ class MethodChart {
 
     if (!vis.container) return;
 
-    vis.width = Math.max(vis.container.clientWidth || 0, vis.config.width);
+    vis.width = vis.container.clientWidth || vis.config.width;
     vis.height = vis.config.height;
     vis.radius = Math.min(vis.width, vis.height) / 2 - 20;
 
