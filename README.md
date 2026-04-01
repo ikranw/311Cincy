@@ -46,9 +46,11 @@ We debated between a line chart and a bar chart for the timeline. Since we were 
 
 <!-- write here -- 1 section on the visualization components: Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions.  Please include screenshots to illustrate, and relate these screenshots to the text.1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots. -->
 **Overview of our website:**
+
 <img scr="assets/Fullscreen.png" width="300"/>
 
 Our map had a couple features. It had the option for user to choose and color between neighborhood, priority, public agency, and days to complete. It also had a feature where users could choose between 1 or more different service types to filter map and other charts by. And through a web color picker, they can choose the service types data points' colors. The user also as an extra level 8 feature, choose number of days to close to filter the data on the map. There is also differnent map views the user can choose, like heatmap, streetview, and topography. And there is the brush toggle to filter data points. 
+
 <img scr = "assets/map-option-colors.png" width="300"/>
 <img src="assets/map-service-type-feature.png" width="300"/>
 <img src="assets/map.png" width="300"/>
