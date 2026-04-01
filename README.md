@@ -46,14 +46,14 @@ We debated between a line chart and a bar chart for the timeline. Since we were 
 
 <!-- write here -- 1 section on the visualization components: Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions.  Please include screenshots to illustrate, and relate these screenshots to the text.1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots. -->
 **Overview of our website:**
-Our website started with a focus on flooding requests. There is hover tooltips showcasing information for all visuals. 
+Our website started with a focus on flooding requests. There are hover tooltips showcasing information for all of our visuals. 
 
 
 <img src="assets/Fullscreen.png" width="300"/>
 
 
 **Map:**
-Our map had a couple features. It had the option for user to choose and color between neighborhood, priority, public agency, and days to complete. It also had a feature where users could choose between 1 or more different service types to filter map and other charts by. And through a web color picker, they can choose the service types data points' colors. The user also has an extra level 8 feature to use: to choose number of days to close to filter the data on the map. There is also differnent map views the user can choose, like heatmap, streetview, and topography. And there is the brush toggle to filter data points on visuals on the website. 
+Our map has a couple features. It has the option for a user to choose and color between neighborhood, priority, public agency, and days to complete categories. It also had a feature where users could choose between 1 or more different service types to filter map and other charts by. And through a web color picker, they can choose the service types data points' colors. The user also has an extra level 8 feature to use: to choose number of days to close to filter the data on the map. There is also different map views the user can choose, like heatmap, streetview, and topography. And there is the brush toggle to filter data points on visuals on the website. 
 
 
 <img src="assets/map-option-colors.png" width="300"/>
@@ -78,7 +78,7 @@ A piechart was selected because the choices in methods weren't many, so a piecha
 <img src="assets/piechart.png" width="300"/>
 
 **Service Department:**
-A lollipop chart was selected as an option to showcase a unique visual not often used. It can is also linked through clicking on the dots of the line, updating all visuals. 
+A lollipop chart was selected as an option to showcase a unique visual not often used. It can also do linked actions through clicking on the dots of the line, updating all visuals. And there is a horizontal scroll to easily navigate the labels and data.
 
 <img src="assets/servicedepartment.png" width="300"/>
 
@@ -88,7 +88,7 @@ A horizontal bar chart was selected for this data. Since there are only few choi
 <img src="assets/priority.png" width="300"/>
 
 **Service Chart:**
-A horizontal bar chart was selected for this data as well. It was selected for people to have an easy time to compare and contrast between different types fo request. It is also linked through the bar as well. 
+A horizontal bar chart was selected for this data as well. It was selected for people to have an easy time to compare and contrast between different types of requests. It is also linked through the bar as well. 
 
 <img src="assets/Service-Chart.png" width="300"/>
 
