@@ -97,7 +97,7 @@ A horizontal bar chart was selected for this data as well. It was selected for p
 ## What You Can Discover
 
 <!-- write here 1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots.-->
-Since our application was mainly focused on flooding data, findings and conclusions connected to flooding will be drawn. One finding was that flooding isn't a common requests compared to others like leaks and street lights repair. So, flooding is not a common issue to be reported on. Two, the highest and most frequent amount of flooding requests occurs around summer months, specifically with the highest requests made in July to August. Meaning flooding is common around summer compared to other seasons. And lastly, flooding is an issue that occurs across all neighborhoods as evident in the map neighborhood data in the first screenshot below. 
+Since our application was mainly focused on flooding data, findings and conclusions connected to flooding will be drawn. One finding was that flooding isn't a common requests= compared to other requests like leaks and street lights repair. So, flooding is not a common issue to be reported on. Two, the highest and most frequent amount of flooding requests occurs around summer months, specifically with the highest requests made in July to August. Meaning flooding is common around summer compared to other seasons. And lastly, flooding is an issue that occurs across all neighborhoods as evident in the map neighborhood data in the first screenshot below. 
 
 <img src="assets/floodingdata-overview.png" width="300"/>
 <img src="assets/requestsovertime.png" width="300"/>
@@ -139,8 +139,8 @@ We used AI minimally as a way to debug our code, and to help us jumpstart featur
 ## Who Did What
 
 We took a structured approach on breaking up the workload. We did not want to have too many merge conflicts, so we set up the project in a modular format, where the containers for each visualization were set up first, and then each person was assigned specific ones that they could work on in seperate files. This minimized doing the same work twice, and rarely introduced conflicts. The breakdown of tasks is as follows, however there was additional overlap as people fixed bugs across responsibilities:
-- Kelly: everything map related, initial project set up
-- Fareena: everything timeline related, brushing and filtering
+- Kelly: everything map related, initial project set up, data preprocessing
+- Fareena: everything timeline related, brushing and filtering, and additional features
 - Faith: Categorical views (priority and service type charts), concept sketches
 - Ikran: Categorical views (neighborhood, method, and department charts), linking interactions and toggles, service types, hosting of site
 
