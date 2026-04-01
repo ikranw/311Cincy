@@ -48,6 +48,10 @@ We debated between a line chart and a bar chart for the timeline. Since we were 
 **Overview of our website:**
 Our website started with a focus on flooding requests. There is hover tooltips showcasing information for all visuals. 
 
+
+<img src="assets/Fullscreen.png" width="300"/>
+
+
 **Map:**
 Our map had a couple features. It had the option for user to choose and color between neighborhood, priority, public agency, and days to complete. It also had a feature where users could choose between 1 or more different service types to filter map and other charts by. And through a web color picker, they can choose the service types data points' colors. The user also has an extra level 8 feature to use: to choose number of days to close to filter the data on the map. There is also differnent map views the user can choose, like heatmap, streetview, and topography. And there is the brush toggle to filter data points on visuals on the website. 
 
