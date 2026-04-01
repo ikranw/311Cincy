@@ -99,6 +99,10 @@ A horizontal bar chart was selected for this data as well. It was selected for p
 <!-- write here 1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots.-->
 Since our application was mainly focused on flooding data, findings and conclusions connected to flooding will be drawn. One finding was that
 
+<img src="assets/floodingdata-overview.png" width="300"/>
+<img src="assets/requestsovertime.png" width="300"/>
+<img src="assets/service-requests-compare.png" width="300"/>
+
 ---
 
 ## Process
