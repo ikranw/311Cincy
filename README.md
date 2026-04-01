@@ -46,28 +46,42 @@ We debated between a line chart and a bar chart for the timeline. Since we were 
 
 <!-- write here -- 1 section on the visualization components: Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions.  Please include screenshots to illustrate, and relate these screenshots to the text.1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots. -->
 **Overview of our website:**
+Our website started with a focus on flooding requests. There is hover tooltips showcasing information for all visuals. 
 
 <img scr="assets/Fullscreen.png" width="300"/>
 
-Our map had a couple features. It had the option for user to choose and color between neighborhood, priority, public agency, and days to complete. It also had a feature where users could choose between 1 or more different service types to filter map and other charts by. And through a web color picker, they can choose the service types data points' colors. The user also as an extra level 8 feature, choose number of days to close to filter the data on the map. There is also differnent map views the user can choose, like heatmap, streetview, and topography. And there is the brush toggle to filter data points. 
+**Map**
+Our map had a couple features. It had the option for user to choose and color between neighborhood, priority, public agency, and days to complete. It also had a feature where users could choose between 1 or more different service types to filter map and other charts by. And through a web color picker, they can choose the service types data points' colors. The user also has an extra level 8 feature to use: to choose number of days to close to filter the data on the map. There is also differnent map views the user can choose, like heatmap, streetview, and topography. And there is the brush toggle to filter data points on visuals on the website. 
 
 <img scr = "assets/map-option-colors.png" width="300"/>
 <img src="assets/map-service-type-feature.png" width="300"/>
 <img src="assets/map.png" width="300"/>
 
 
-Timeline
-Neighborhoods
-Most Common Method 
-Service Department
-Priority Chart
-Service Chart
+**Timeline**
+The timeline chart shows all data requests overtime. It has a feature where user can choose which months to show. It has also a brush action that is activated through the enable date filter. A bar chart was best chosen to demonstrate the changes over time. 
+
+**Neighborhoods**
+A horizontal bar chart was selected for this visual to allow easy comparison between neighborhoods and the numbers of requests made. It has a linking action where the user can click on a data point, and all visuals update. 
+
+**Most Common Method**
+A piechart was selected because the choices in methods weren't many, so a piechart was a fitting and unique visual to have. We also wanted a variety of types of charts instead of all bar charts. It can be linked through clicking on the slices or the label. And there is a horizontal scroll to easily navigate the labels and data. 
+
+**Service Department**
+A lollipop chart was selected as an option to showcase a unique visual not often used. It can is also linked through clicking on the dots of the line, updating all visuals. 
+
+**Priority Chart**
+A horizontal bar chart was selected for this data. Since there are only few choices to compare, it makes it easier for the user to draw conclusion through this bar chart without being overwhelmed by information. It is also linked through the clicking on bars. 
+
+**Service Chart**
+A horizontal bar chart was selected for this data as well. It was selected for people to have an easy time to compare and contrast between different types fo request. It is also linked through the bar as well. 
 
 ---
 
 ## What You Can Discover
 
 <!-- write here 1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots.-->
+Since our application was mainly focused on flooding data, findings and conclusions connected to flooding will be drawn. One finding was that
 
 ---
 
