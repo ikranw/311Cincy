@@ -48,42 +48,40 @@ We debated between a line chart and a bar chart for the timeline. Since we were 
 **Overview of our website:**
 Our website started with a focus on flooding requests. There is hover tooltips showcasing information for all visuals. 
 
-<img scr="assets/Fullscreen.png" width="300"/>
-
-**Map**
+**Map:**
 Our map had a couple features. It had the option for user to choose and color between neighborhood, priority, public agency, and days to complete. It also had a feature where users could choose between 1 or more different service types to filter map and other charts by. And through a web color picker, they can choose the service types data points' colors. The user also has an extra level 8 feature to use: to choose number of days to close to filter the data on the map. There is also differnent map views the user can choose, like heatmap, streetview, and topography. And there is the brush toggle to filter data points on visuals on the website. 
 
-<img scr = "assets/map-option-colors.png" width="300"/>
+<img scr="assets/map-option-colors.png" width="300"/>
 <img src="assets/map-service-type-feature.png" width="300"/>
 <img src="assets/map.png" width="300"/>
 
 
-**Timeline**
+**Timeline:**
 The timeline chart shows all data requests overtime. It has a feature where user can choose which months to show. It has also a brush action that is activated through the enable date filter. A bar chart was best chosen to demonstrate the changes over time. 
 
 <img src="assets/map.png" width="300"/>
 
-**Neighborhoods**
+**Neighborhoods:**
 A horizontal bar chart was selected for this visual to allow easy comparison between neighborhoods and the numbers of requests made. It has a linking action where the user can click on a data point, and all visuals update. 
 
 <img src="assets/Neighborhood.png" width="300"/>
 
-**Most Common Method**
+**Most Common Method:**
 A piechart was selected because the choices in methods weren't many, so a piechart was a fitting and unique visual to have. We also wanted a variety of types of charts instead of all bar charts. It can be linked through clicking on the slices or the label. And there is a horizontal scroll to easily navigate the labels and data. 
 
 <img src="assets/piechart.png" width="300"/>
 
-**Service Department**
+**Service Department:**
 A lollipop chart was selected as an option to showcase a unique visual not often used. It can is also linked through clicking on the dots of the line, updating all visuals. 
 
 <img src="assets/servicedepartment.png" width="300"/>
 
-**Priority Chart**
+**Priority Chart:**
 A horizontal bar chart was selected for this data. Since there are only few choices to compare, it makes it easier for the user to draw conclusion through this bar chart without being overwhelmed by information. It is also linked through the clicking on bars. 
 
 <img src="assets/priority.png" width="300"/>
 
-**Service Chart**
+**Service Chart:**
 A horizontal bar chart was selected for this data as well. It was selected for people to have an easy time to compare and contrast between different types fo request. It is also linked through the bar as well. 
 
 <img src="assets/Service-Chart.png" width="300"/>
