@@ -97,7 +97,7 @@ A horizontal bar chart was selected for this data as well. It was selected for p
 ## What You Can Discover
 
 <!-- write here 1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots.-->
-Since our application was mainly focused on flooding data, findings and conclusions connected to flooding will be drawn. One finding was that
+Since our application was mainly focused on flooding data, findings and conclusions connected to flooding will be drawn. One finding was that flooding isn't a common requests compared to others like leaks and street lights repair. So, flooding is not a common issue to be reported on. Two, the highest and most frequent amount of flooding requests occurs around summer months, specifically with the highest requests made in July to August. Meaning flooding is common around summer compared to other seasons. And lastly, flooding is an issue that occurs across all neighborhoods as evident in the map neighborhood data in the first screenshot below. 
 
 <img src="assets/floodingdata-overview.png" width="300"/>
 <img src="assets/requestsovertime.png" width="300"/>
