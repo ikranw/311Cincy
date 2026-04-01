@@ -65,7 +65,7 @@ Our map had a couple features. It had the option for user to choose and color be
 **Timeline:**
 The timeline chart shows all data requests overtime. It has a feature where user can choose which months to show. It has also a brush action that is activated through the enable date filter. A bar chart was best chosen to demonstrate the changes over time. 
 
-<img src="assets/map.png" width="300"/>
+<img src="assets/timeline-brush-feature.png" width="300"/>
 
 **Neighborhoods:**
 A horizontal bar chart was selected for this visual to allow easy comparison between neighborhoods and the numbers of requests made. It has a linking action where the user can click on a data point, and all visuals update. 
