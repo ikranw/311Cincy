@@ -61,20 +61,32 @@ Our map had a couple features. It had the option for user to choose and color be
 **Timeline**
 The timeline chart shows all data requests overtime. It has a feature where user can choose which months to show. It has also a brush action that is activated through the enable date filter. A bar chart was best chosen to demonstrate the changes over time. 
 
+<img src="assets/map.png" width="300"/>
+
 **Neighborhoods**
 A horizontal bar chart was selected for this visual to allow easy comparison between neighborhoods and the numbers of requests made. It has a linking action where the user can click on a data point, and all visuals update. 
+
+<img src="assets/Neighborhood.png" width="300"/>
 
 **Most Common Method**
 A piechart was selected because the choices in methods weren't many, so a piechart was a fitting and unique visual to have. We also wanted a variety of types of charts instead of all bar charts. It can be linked through clicking on the slices or the label. And there is a horizontal scroll to easily navigate the labels and data. 
 
+<img src="assets/piechart.png" width="300"/>
+
 **Service Department**
 A lollipop chart was selected as an option to showcase a unique visual not often used. It can is also linked through clicking on the dots of the line, updating all visuals. 
+
+<img src="assets/servicedepartment.png" width="300"/>
 
 **Priority Chart**
 A horizontal bar chart was selected for this data. Since there are only few choices to compare, it makes it easier for the user to draw conclusion through this bar chart without being overwhelmed by information. It is also linked through the clicking on bars. 
 
+<img src="assets/priority.png" width="300"/>
+
 **Service Chart**
 A horizontal bar chart was selected for this data as well. It was selected for people to have an easy time to compare and contrast between different types fo request. It is also linked through the bar as well. 
+
+<img src="assets/Service-Chart.png" width="300"/>
 
 ---
 
@@ -122,7 +134,7 @@ We took a structured approach on breaking up the workload. We did not want to ha
 - Kelly: everything map related, initial project set up
 - Fareena: everything timeline related, brushing and filtering
 - Faith: Categorical views (priority and service type charts), concept sketches
-- Ikran: Categorical views (neighborhood, method, and department charts), linking interactions and toggles, hosting of site
+- Ikran: Categorical views (neighborhood, method, and department charts), linking interactions and toggles, service types, hosting of site
 
 ---
 
