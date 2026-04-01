@@ -44,13 +44,22 @@ We debated between a line chart and a bar chart for the timeline. Since we were 
 
 ## Visualization Components
 
-<!-- write here -->
+<!-- write here -- 1 section on the visualization components: Explain each view of the data, the GUI, etc.  Explain how you can interact with your application, and how the views update in response to these interactions.  Please include screenshots to illustrate, and relate these screenshots to the text.1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots. -->
+Overview of our website:
+<img scr="assets/Fullscreen.png" width="300"/>
 
+Our Map was 
+Timeline
+Neighborhoods
+Most Common Method 
+Service Department
+Priority Chart
+Service Chart
 ---
 
 ## What You Can Discover
 
-<!-- write here -->
+<!-- write here 1 section on what your application enables you to discover: Present some findings you arrive at with your application, including screenshots.-->
 
 ---
 
